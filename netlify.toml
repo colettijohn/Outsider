@@ -1,0 +1,39 @@
+# Netlify configuration for Outsider: Cosmic Council
+
+[build]
+  # Build command for the client
+  command = "npm run build"
+  # Directory to publish (Vite output)
+  publish = "dist"
+  # Use Node.js 18.x
+  node_version = "18"
+
+# Redirect rules for SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Environment variables (configure in Netlify UI)
+# VITE_SERVER_URL = "https://your-server-url.com"
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images
+[[headers]]
+  for = "/imgs/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
