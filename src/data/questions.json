@@ -1,0 +1,87 @@
+{
+    "General": [],
+    "Deep Thoughts": [
+        { "crew": "What's a simple truth that is surprisingly hard for people to accept?", "impostor": "What's a common 'white lie' that you think is actually harmful?" },
+        { "crew": "What's a skill that everyone should learn to be a better person?", "impostor": "What's a skill that everyone should learn for basic survival?" },
+        { "crew": "If you could ask a super-intelligent AI one question, what would it be?", "impostor": "If you could ask your future self one question, what would it be?" },
+        { "crew": "What is the most beautiful thing about humanity?", "impostor": "What is the most terrifying thing about humanity?" },
+        { "crew": "What common piece of advice is actually terrible?", "impostor": "What is the most overused, meaningless inspirational quote?" }
+    ],
+    "Hypotheticals": [
+        { "crew": "You can have a dinner party with any three people, living or dead. Who do you invite?", "impostor": "You're stuck on a deserted island with three people, living or dead. Who do you choose?" },
+        { "crew": "You're given a time machine that can only go to the past. What single event do you witness?", "impostor": "You're given a time machine that can only go to the future. What single event do you witness?" },
+        { "crew": "What would be the most surprising thing to find at the bottom of the ocean?", "impostor": "What would be the most surprising thing to find on the surface of Mars?" },
+        { "crew": "You have to describe humanity to an alien using only one movie. Which movie do you pick?", "impostor": "You have to describe humanity to an alien using only one song. Which song do you pick?" },
+        { "crew": "If you had to live inside a video game world for the rest of your life, which one would you choose?", "impostor": "If you had to live inside a board game world for the rest of your life, which one would you choose?" }
+    ],
+    "Wild Cards": [
+        { "crew": "What movie has a plot twist that genuinely shocked you?", "impostor": "What movie has a plot twist that you saw coming from a mile away?" },
+        { "crew": "What fictional villain do you secretly kind of root for?", "impostor": "What fictional hero do you find secretly annoying?" },
+        { "crew": "What's a TV show that you think ended too soon?", "impostor": "What's a TV show that you think went on for way too long?" },
+        { "crew": "What song is your ultimate 'guilty pleasure'?", "impostor": "What song do you pretend to like to fit in?" },
+        { "crew": "What's a popular trend that you just don't understand?", "impostor": "What's a dead trend that you wish would come back?" }
+    ],
+    "Daily Routines": [
+        { "crew": "What's the one thing you absolutely must do to start your day right?", "impostor": "What's the one thing you absolutely must do to end your day right?" },
+        { "crew": "What's a chore you secretly find satisfying?", "impostor": "What's a chore you would gladly pay someone else to do forever?" },
+        { "crew": "What's an app on your phone that you find genuinely useful?", "impostor": "What's an app on your phone that you probably spend too much time on?" },
+        { "crew": "What's a small, simple pleasure that always makes you happy?", "impostor": "What's a minor inconvenience that always annoys you more than it should?" },
+        { "crew": "What's a 'weird' habit you have that nobody knows about?", "impostor": "What's a 'normal' habit that everyone seems to have, but you don't?" }
+    ],
+    "Objects & Places": [
+        { "crew": "If you could have any fictional vehicle, what would it be?", "impostor": "If you could have any fictional weapon, what would it be?" },
+        { "crew": "What's an object from your childhood that you wish you still had?", "impostor": "What's an object you own now that you hope to keep forever?" },
+        { "crew": "What's the most beautiful place you've ever been to?", "impostor": "What's the most interesting place you've ever been to?" },
+        { "crew": "What's a place that feels magical to you?", "impostor": "What's a place that feels haunted to you?" },
+        { "crew": "If you could add one new room to your house, what would it be?", "impostor": "If you could get rid of one room in your house, what would it be?" }
+    ],
+    "History & Mythology": [
+        { "crew": "Which historical figure do you think would be most interesting to talk to?", "impostor": "Which mythological figure do you think would be most interesting to talk to?" },
+        { "crew": "What historical event would you want to change if you could?", "impostor": "What historical mystery would you want to know the definitive answer to?" },
+        { "crew": "Which ancient civilization seems like it would have been the most advanced?", "impostor": "Which ancient civilization seems like it would have been the most brutal?" },
+        { "crew": "Which mythological god would you want as a boss?", "impostor": "Which mythological god would you want as a roommate?" },
+        { "crew": "What historical 'villain' do you think was actually misunderstood?", "impostor": "What historical 'hero' do you think was actually a terrible person?" }
+    ],
+    "Science & Nature": [
+        { "crew": "What animal do you think is surprisingly intelligent?", "impostor": "What animal do you think is surprisingly dangerous?" },
+        { "crew": "If you could have any animal's ability, what would you choose?", "impostor": "If you could combine the abilities of two different animals, what would they be?" },
+        { "crew": "What scientific breakthrough do you hope happens in your lifetime?", "impostor": "What sci-fi technology do you hope becomes real in your lifetime?" },
+        { "crew": "What's a fact about space that blows your mind?", "impostor": "What's a fact about the deep ocean that blows your mind?" },
+        { "crew": "What's a natural phenomenon you would love to witness in person?", "impostor": "What's a natural disaster that you are most afraid of?" }
+    ],
+    "Arts & Literature": [
+        { "crew": "What book do you think everyone should read?", "impostor": "What book do you think is massively overrated?" },
+        { "crew": "Which fictional character do you feel you are most like?", "impostor": "Which fictional character would you want to be your best friend?" },
+        { "crew": "What's a movie that always makes you cry?", "impostor": "What's a movie that always makes you laugh?" },
+        { "crew": "If you could have a masterpiece painting in your home, which would it be?", "impostor": "If you could have a world-famous sculpture in your home, which would it be?" },
+        { "crew": "What's a song you think has perfect lyrics?", "impostor": "What's a song you think has a perfect melody?" }
+    ],
+    "Food & Drink": [
+        { "crew": "What is your ultimate comfort food?", "impostor": "What food do you crave when you're sick?" },
+        { "crew": "What's a food that is loved by many, but you can't stand?", "impostor": "What's a food that is hated by many, but you absolutely love?" },
+        { "crew": "You can only eat one food for the rest of your life. What is it?", "impostor": "You have to eliminate one food from the world forever. What is it?" },
+        { "crew": "What's the best topping to put on a pizza?", "impostor": "What's the best thing to dip french fries in?" },
+        { "crew": "Describe your ideal last meal.", "impostor": "Describe your ideal breakfast in bed." }
+    ],
+    "Travel & Geography": [
+        { "crew": "What's the #1 destination on your travel bucket list?", "impostor": "What's a popular tourist destination you have no interest in visiting?" },
+        { "crew": "Would you rather take a vacation to a bustling, historic city or a remote, pristine nature spot?", "impostor": "Would you rather live permanently in a bustling, historic city or a remote, pristine nature spot?" },
+        { "crew": "What's the most useful thing to learn before traveling to a new country?", "impostor": "What's the most important item to pack when traveling to a new country?" },
+        { "crew": "Describe the perfect road trip.", "impostor": "Describe the perfect camping trip." },
+        { "crew": "What's the best part about traveling?", "impostor": "What's the worst part about traveling?" }
+    ],
+    "Technology & Future": [
+        { "crew": "What piece of modern technology feels like magic to you?", "impostor": "What piece of old technology do you feel nostalgic for?" },
+        { "crew": "What's a prediction about the future that you think is likely to come true?", "impostor": "What's a prediction about the future that you hope doesn't come true?" },
+        { "crew": "What's one way technology has made your life genuinely better?", "impostor": "What's one way technology has made your life genuinely worse?" },
+        { "crew": "If you could have a robot assistant, what would be its main purpose?", "impostor": "If you could have a bio-enhancement implant, what would be its main purpose?" },
+        { "crew": "Is social media a net positive or a net negative for society?", "impostor": "Is artificial intelligence a net positive or a net negative for humanity's future?" }
+    ],
+    "Personality & Psyche": [
+        { "crew": "What's a quality you admire most in other people?", "impostor": "What's a quality you are most proud of in yourself?" },
+        { "crew": "Are you more of an optimist or a realist?", "impostor": "Are you more of an introvert or an extrovert?" },
+        { "crew": "What's a small fear that you have?", "impostor": "What's a major goal that you have?" },
+        { "crew": "How do you prefer to relax after a stressful day?", "impostor": "How do you prefer to celebrate a major success?" },
+        { "crew": "What's one thing you would like to change about yourself?", "impostor": "What's one thing you would never change about yourself?" }
+    ]
+}

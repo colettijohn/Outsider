@@ -1,0 +1,664 @@
+/* Modern CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+}
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+    margin: 0;
+}
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Screen reader only utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid #F59E0B; /* Amber 500 */
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: #F59E0B;
+    color: #111827;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 9999;
+    transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Global & Typography Styles (Mobile-First) */
+body { 
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: #111827; /* Gray 900 */
+    color: #E5E7EB; /* Gray 200 */
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+.title-font {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+}
+.cosmic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    z-index: -1;
+}
+@keyframes move-particles {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100vw, -100vh); }
+}
+.particles {
+    position: absolute;
+    width: 200vw;
+    height: 200vh;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="%23E5E7EB" cx="1" cy="1" r="0.1"/><circle fill="%23E5E7EB" cx="15" cy="25" r="0.1"/><circle fill="%23E5E7EB" cx="30" cy="50" r="0.1"/><circle fill="%23E5E7EB" cx="50" cy="75" r="0.1"/><circle fill="%23E5E7EB" cx="80" cy="90" r="0.1"/><circle fill="%23E5E7EB" cx="95" cy="5" r="0.1"/><circle fill="%23E5E7EB" cx="60" cy="15" r="0.1"/><circle fill="%23E5E7EB" cx="40" cy="35" r="0.1"/><circle fill="%23E5E7EB" cx="20" cy="80" r="0.1"/><circle fill="%23E5E7EB" cx="70" cy="5" r="0.1"/><circle fill="%23E5E7EB" cx="5" cy="60" r="0.1"/><circle fill="%23E5E7EB" cx="85" cy="45" r="0.1"/></svg>');
+    background-repeat: repeat;
+    animation: move-particles 200s linear infinite;
+}
+.button-primary {
+    background-color: #A21CAF; /* Fuchsia 700 */
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 5px rgba(162, 28, 175, 0.5);
+}
+.button-primary:hover {
+    background-color: #BE185D; /* Pink 700 */
+    box-shadow: 0 0 15px rgba(162, 28, 175, 0.8);
+}
+.button-primary:disabled {
+    background-color: #4B5563; /* Gray 600 */
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.panel {
+    background-color: #1F2937; /* Gray 800 */
+    border: 1px solid #F59E0B; /* Amber 500 */
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+.input-field {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #6B7280; /* Gray 500 */
+    border-radius: 0;
+    transition: border-color 0.3s ease;
+}
+.input-field:focus {
+    outline: none;
+    border-bottom-color: #F59E0B; /* Amber 500 */
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.screen-enter {
+    animation: slideIn 0.5s ease-out forwards;
+}
+.animate-slideIn {
+    animation: slideIn 0.3s ease-out forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+/* Keyboard shortcut styling */
+.kbd {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #F59E0B; /* Amber 500 */
+    background-color: #1F2937; /* Gray 800 */
+    border: 1px solid #4B5563; /* Gray 600 */
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 0 #374151; /* Gray 700 */
+    text-transform: uppercase;
+    min-width: 2rem;
+    text-align: center;
+}
+/* Celestial Atlas Styles */
+.constellation { 
+    /* Use a multi-layered box-shadow for border and glow effects without affecting layout. */
+    box-shadow: inset 0 0 0 2px transparent, 0 0 15px rgba(245, 158, 11, 0.0);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.constellation-line { 
+    stroke: #4B5563; 
+    stroke-width: 1; 
+    transition: stroke 0.3s ease; 
+    vector-effect: non-scaling-stroke; /* Prevent stroke from causing layout shifts */
+}
+.constellation-star { 
+    fill: #4B5563; 
+    stroke: #4B5563; /* Add a stroke to stabilize the element's perceived size */
+    stroke-width: 0.5;
+    transition: all 0.3s ease; 
+    vector-effect: non-scaling-stroke; /* Prevent stroke from causing layout shifts */
+}
+.constellation:hover .constellation-line { stroke: #F59E0B; }
+.constellation:hover .constellation-star { fill: #FBBF24; }
+.constellation.selected {
+    /* The first shadow creates the 2px "border", the second creates the glow. */
+    box-shadow: inset 0 0 0 2px #FBBF24, 0 0 15px rgba(245, 158, 11, 0.5);
+}
+.constellation.selected .constellation-line { stroke: #FBBF24; }
+.constellation.selected .constellation-star { fill: #FFF; }
+
+@keyframes galaxy-swirl {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.galaxy-core { animation: galaxy-swirl 20s linear infinite; }
+@keyframes meteor-streak {
+   0% { transform: translateX(200%) translateY(-200%) rotate(45deg); opacity: 1; }
+   100% { transform: translateX(-200%) translateY(200%) rotate(45deg); opacity: 0; }
+}
+.meteor { animation: meteor-streak 2s ease-in-out infinite; }
+
+@keyframes drift-1 {
+    0% { transform: translateX(-150%) translateY(20%) rotate(-15deg); opacity: 0; }
+    10% { opacity: var(--start-opacity, 0.2); }
+    80% { opacity: var(--start-opacity, 0.2); }
+    100% { transform: translateX(150%) translateY(-20%) rotate(15deg); opacity: 0; }
+}
+@keyframes drift-2 {
+    0% { transform: translateX(150%) translateY(-20%) rotate(15deg); opacity: 0; }
+    10% { opacity: var(--start-opacity, 0.2); }
+    80% { opacity: var(--start-opacity, 0.2); }
+    100% { transform: translateX(-150%) translateY(20%) rotate(-15deg); opacity: 0; }
+}
+@keyframes drift-3 {
+    0% { transform: translateX(20%) translateY(-150%) rotate(-15deg); opacity: 0; }
+    10% { opacity: var(--start-opacity, 0.2); }
+    80% { opacity: var(--start-opacity, 0.2); }
+    100% { transform: translateX(-20%) translateY(150%) rotate(15deg); opacity: 0; }
+}
+@keyframes drift-4 {
+    0% { transform: translateX(-20%) translateY(150%) rotate(15deg); opacity: 0; }
+    10% { opacity: var(--start-opacity, 0.2); }
+    80% { opacity: var(--start-opacity, 0.2); }
+    100% { transform: translateX(20%) translateY(-150%) rotate(-15deg); opacity: 0; }
+}
+
+@keyframes twinkle-bright {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+@keyframes twinkle-medium {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.7; }
+}
+@keyframes twinkle-dim {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.4; }
+}
+
+/* --- NEW GLITCHING LOGO STYLES --- */
+@keyframes glitch-effect {
+    0% { transform: translate(0, 0); text-shadow: none; }
+    20% { transform: translate(-2px, 2px); text-shadow: -1px 0 red, 1px 0 cyan; }
+    40% { transform: translate(2px, -2px); text-shadow: 1px 0 red, -1px 0 cyan; }
+    60% { transform: translate(-1px, 1px); text-shadow: none; }
+    80% { transform: translate(1px, -1px); text-shadow: -1px 0 red, 1px 0 cyan; }
+    100% { transform: translate(0, 0); text-shadow: none; }
+}
+.glitching-letter {
+    animation: glitch-effect 0.25s linear;
+    display: inline-block;
+}
+@keyframes continuous-glitch {
+    0%, 100% { transform: translate(0, 0); text-shadow: -1px 0 red, 1px 0 cyan; }
+    10% { transform: translate(-3px, -1px); }
+    20% { transform: translate(3px, 1px); }
+    30% { transform: translate(-3px, 1px); text-shadow: 1px 0 red, -1px 0 cyan; }
+    40% { transform: translate(3px, -1px); }
+    50% { transform: translate(-2px, 2px); }
+    60% { transform: translate(2px, -2px); text-shadow: -1px 0 red, 1px 0 cyan; }
+    70% { transform: translate(1px, -1px); }
+    80% { transform: translate(-1px, 1px); }
+    90% { transform: translate(2px, 1px); text-shadow: 1px 0 red, -1px 0 cyan; }
+}
+.konami-armed { animation: continuous-glitch 0.4s linear infinite; }
+
+/* --- NEW COSMIC ARCHIVES STYLES --- */
+@keyframes nexus-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(245, 158, 11, 0.7); }
+}
+@keyframes slate-materialize {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes text-focus-in {
+  0% { filter: blur(12px); opacity: 0; }
+  100% { filter: blur(0px); opacity: 1; }
+}
+@keyframes rune-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+.archive-backdrop-enter { animation: fadeIn 0.5s ease-out forwards; }
+.archive-backdrop-exit { animation: fadeOut 0.5s ease-in forwards; }
+.archive-text-enter { animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) forwards; }
+.data-slate-enter { animation: slate-materialize 0.7s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.chat-message-enter {
+    animation: fadeIn 0.4s ease-out;
+}
+
+
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* --- NEW ARCHIVE TRANSITION STYLES --- */
+@keyframes slide-out-left {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-50px); opacity: 0; }
+}
+@keyframes slide-in-right {
+    from { transform: translateX(50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slide-out-right {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(50px); opacity: 0; }
+}
+@keyframes slide-in-left {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.slide-out-left { animation: slide-out-left 0.3s ease-in forwards; }
+.slide-in-right { animation: slide-in-right 0.3s ease-out forwards; }
+.slide-out-right { animation: slide-out-right 0.3s ease-in forwards; }
+.slide-in-left { animation: slide-in-left 0.3s ease-out forwards; }
+
+
+/* --- NEW "LIVING INTERFACE" STYLES --- */
+@keyframes star-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; fill: #FFF; }
+    50% { transform: scale(1.6); opacity: 0.8; fill: #FBBF24; }
+}
+@keyframes line-trace {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+}
+.constellation-star { transform-origin: center; } /* Add this for centered scaling */
+.constellation.activated .constellation-star {
+    animation: star-pulse 0.6s ease-in-out;
+}
+.constellation.activated .constellation-line {
+    stroke-dasharray: 100;
+    animation: line-trace 0.6s ease-out forwards;
+}
+
+/* --- NEW ALTERNATIVE "COSMIC SURGE" ANIMATION --- */
+@keyframes star-surge {
+    0% { transform: scale(1); fill: #4B5563; } /* Start from unselected state */
+    20% { transform: scale(0.5); fill: #60A5FA; } /* Charge up (blue) */
+    50% { transform: scale(2.5); fill: #FEFCE8; filter: drop-shadow(0 0 8px #FBBF24); } /* Explode (bright yellow-white) */
+    100% { transform: scale(1); fill: #FFF; filter: none; } /* Settle to selected state */
+}
+@keyframes line-surge {
+    from { stroke-dashoffset: 100; stroke: #FBBF24; }
+    to { stroke-dashoffset: 0; stroke: #FBBF24; }
+}
+.constellation.activated-alt .constellation-star {
+    animation: star-surge 0.8s ease-in-out forwards;
+}
+.constellation.activated-alt .constellation-line {
+    stroke-dasharray: 100;
+    animation: line-surge 0.8s ease-out forwards;
+}
+/* Add a subtle shockwave effect to the container */
+@keyframes shockwave {
+    0% { box-shadow: inset 0 0 0 2px transparent, 0 0 15px rgba(245, 158, 11, 0.0); }
+    50% { box-shadow: inset 0 0 0 2px #FBBF24, 0 0 30px rgba(245, 158, 11, 0.8); }
+    100% { box-shadow: inset 0 0 0 2px #FBBF24, 0 0 15px rgba(245, 158, 11, 0.5); }
+}
+.constellation.activated-alt {
+    animation: shockwave 0.8s ease-in-out forwards;
+}
+
+/* --- NEW "STARDUST GENESIS" ANIMATION --- */
+.stardust-particle {
+    opacity: 0;
+    transform-origin: center;
+    animation-fill-mode: forwards;
+}
+@keyframes stardust-swirl {
+    0% { transform: scale(0) rotate(0deg); opacity: 0.5; }
+    30% { opacity: 0.8; }
+    100% { transform: scale(1.2) rotate(270deg); opacity: 0; }
+}
+.constellation.activated-genesis .stardust-particle {
+    animation-name: stardust-swirl;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* Fast out, gentle slow down */
+}
+
+@keyframes star-ignite {
+    0%, 20% { transform: scale(0); opacity: 0; fill: #60A5FA; } /* Hold at zero for a moment */
+    60% { transform: scale(1.8); opacity: 1; fill: #FEFCE8; filter: drop-shadow(0 0 8px #FBBF24); } /* Softer, less extreme peak */
+    100% { transform: scale(1); opacity: 1; fill: #FFF; filter: none; }
+}
+.constellation.activated-genesis .constellation-star {
+    transform: scale(0); /* Start invisible */
+    animation-name: star-ignite;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); /* "Overshoot" bounce effect */
+    animation-fill-mode: forwards;
+}
+
+.constellation.activated-genesis .constellation-line {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100; /* Start invisible */
+    animation: line-trace 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes text-decode {
+    0% { opacity: 0; filter: blur(5px); transform: translateY(10px); }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+.decoding-text > * {
+    animation: text-decode 0.8s cubic-bezier(0.5, 0, 0.1, 1) forwards;
+    opacity: 0;
+}
+
+.hex-button {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    color: #E5E7EB;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+.hex-button .hex-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    fill: #1F2937;
+    stroke: #F59E0B;
+    stroke-width: 2;
+    transition: all 0.3s ease;
+}
+.hex-button:hover .hex-bg {
+    fill: #432201; /* Amber dark shade */
+    filter: drop-shadow(0 0 5px #F59E0B);
+}
+.hex-button.active .hex-bg {
+     fill: #F59E0B;
+     filter: drop-shadow(0 0 10px #F59E0B);
+}
+.hex-button.active {
+    color: #111827;
+}
+.hex-button:disabled {
+    cursor: not-allowed;
+    color: #6B7280;
+}
+.hex-button:disabled .hex-bg {
+    fill: #374151;
+    stroke: #4B5563;
+    filter: none;
+}
+.hex-button span {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- NEW "COSMIC DEPTH" STYLES --- */
+.nebula {
+    position: absolute;
+    opacity: 0.15;
+    background: radial-gradient(circle, var(--nebula-color) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    filter: blur(30px);
+}
+#meteor-shower-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+#meteor-shower-canvas.active {
+    opacity: 1;
+}
+
+
+/* --- NEW "HOST'S COMMAND" STYLES --- */
+.advanced-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+.advanced-panel.open {
+    max-height: 500px; /* Adjust as needed */
+}
+.slider {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #374151;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+.slider:hover {
+    opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #F59E0B;
+    cursor: pointer;
+}
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #F59E0B;
+    cursor: pointer;
+}
+
+.unselectable {
+    user-select: none;
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For Internet Explorer/Edge */
+}
+/* --- NEW ORRERY LOBBY STYLES --- */
+@keyframes orrery-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(245, 158, 11, 0.5); }
+    50% { transform: scale(1.02); box-shadow: 0 0 60px rgba(245, 158, 11, 0.8); }
+}
+@keyframes player-orbit {
+    from { transform: rotate(0deg) translateX(var(--radius)) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg); }
+}
+.orrery-player {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    animation-name: player-orbit;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+.orrery-player-avatar {
+    transition: transform 0.3s ease;
+}
+.orrery-player:hover .orrery-player-avatar {
+    transform: scale(1.2);
+}
+/* Main Layout Grid (Mobile-First) */
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "content"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh; /* Ensure grid is at least viewport height, but can grow */
+    padding: 1rem; /* Replicates original body padding */
+    position: relative;
+    z-index: 1;
+}
+
+/* Tablet Breakpoint */
+@media (min-width: 768px) {
+    .grid-container {
+        padding: 1.5rem;
+    }
+}
+
+/* Desktop Breakpoint */
+@media (min-width: 1024px) {
+    .grid-container {
+        padding: 2rem;
+    }
+}
+
+header {
+    grid-area: header;
+    /* Give header a minimum height so layout doesn't jump on home screen */
+    min-height: 80px; 
+}
+
+main {
+    grid-area: content;
+    display: flex; /* Centers the React app horizontally */
+    align-items: center; /* Vertically center content */
+    justify-content: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+footer {
+    grid-area: footer;
+}
+
+/* Loading screen styles */
+.orrery-loader {
+    animation: orrery-pulse 2s ease-in-out infinite;
+}
+
+.orrery-loader .ring {
+    animation: galaxy-swirl 15s linear infinite;
+    transform-origin: center;
+}
+
+.orrery-loader .ring-group-1 {
+    animation: galaxy-swirl 20s linear infinite;
+}
+
+.orrery-loader .ring-group-2 {
+    animation: galaxy-swirl 15s linear infinite reverse;
+}
+
+.orrery-loader .planet {
+    animation: twinkle-bright 2s ease-in-out infinite;
+}
+
+.orrery-loader .core-sun {
+    animation: nexus-pulse 3s ease-in-out infinite;
+}
+
+.orrery-loader.ignition .ring {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards, galaxy-swirl 15s linear infinite;
+}
+
+.orrery-loader.ignition .planet {
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.5s forwards, twinkle-bright 2s ease-in-out infinite;
+}
+
+.orrery-loader.stabilization .core-sun {
+    animation: nexus-pulse 2s ease-in-out infinite;
+}
+
+.loading-message {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.5s forwards;
+}
+
+.loading-message-char {
+    display: inline-block;
+    opacity: 0;
+    animation: text-decode 0.4s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(107, 114, 128, 0.5);
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+}
+
+/* Firefox scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(107, 114, 128, 0.5) rgba(31, 41, 55, 0.5);
+}
