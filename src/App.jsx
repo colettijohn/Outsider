@@ -22,6 +22,7 @@ import FeatureFlagTest from './components/FeatureFlagTest'
 import QuestionCardsTest from './components/QuestionCardsTest'
 import OracleComponentsTest from './components/OracleComponentsTest'
 import OracleAITest from './components/OracleAITest'
+import OracleOrbTest from './components/OracleOrbTest'
 
 function App() {
   const { 
@@ -166,6 +167,7 @@ function App() {
     questionCardsTest: <QuestionCardsTest />,
     oracleComponentsTest: <OracleComponentsTest />,
     oracleAITest: <OracleAITest />,
+    oracleOrbTest: <OracleOrbTest />,
   }
 
   return (
