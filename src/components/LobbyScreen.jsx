@@ -28,6 +28,19 @@ const LobbyScreen = () => {
   } = useGame()
   const canStart = gameState.players.length >= 3
 
+  // Helper function for haptic feedback on mobile
+  const triggerHaptic = (style = 'light') => {
+    if (window.navigator && window.navigator.vibrate) {
+      const patterns = {
+        light: 10,
+        medium: 20,
+        heavy: 30,
+        success: [10, 50, 10]
+      }
+      window.navigator.vibrate(patterns[style] || 10)
+    }
+  }
+
   // Keyboard shortcuts for lobby
   useKeyboardShortcut('c', copyRoomCode)
   useKeyboardShortcut('s', () => {
@@ -39,6 +52,10 @@ const LobbyScreen = () => {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [radius, setRadius] = useState(150)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  
+  // State for mobile chat drawer swipe
+  const [drawerSwipeStart, setDrawerSwipeStart] = useState(null)
+  const [drawerOffset, setDrawerOffset] = useState(0)
   
   // State for draggable chat
   const [chatPosition, setChatPosition] = useState({ 
@@ -133,6 +150,29 @@ const LobbyScreen = () => {
     setIsChatOpen(true)
   }, [])
 
+  // Mobile chat drawer swipe handlers
+  const handleDrawerTouchStart = (e) => {
+    setDrawerSwipeStart(e.touches[0].clientY)
+  }
+
+  const handleDrawerTouchMove = (e) => {
+    if (drawerSwipeStart === null) return
+    const currentY = e.touches[0].clientY
+    const diff = currentY - drawerSwipeStart
+    if (diff > 0) {
+      setDrawerOffset(diff)
+    }
+  }
+
+  const handleDrawerTouchEnd = () => {
+    if (drawerOffset > 100) {
+      triggerHaptic('light')
+      setIsChatOpen(false)
+    }
+    setDrawerOffset(0)
+    setDrawerSwipeStart(null)
+  }
+
   // Keyboard shortcuts for lobby
   useKeyboardShortcut('c', copyRoomCode)
   useKeyboardShortcut('t', handleOpenChat) // 't' for talk
@@ -171,14 +211,14 @@ const LobbyScreen = () => {
   }, [gameState.players, me.id, orbitTime, radius])
 
   return (
-    <div className="w-full flex flex-col items-center justify-center relative">
-      <div className="text-center mb-8">
-        <h2 className="title-font text-4xl font-bold text-amber-500 uppercase">
+    <div className="w-full flex flex-col items-center justify-center relative px-4 md:px-0">
+      <div className="text-center mb-4 md:mb-8">
+        <h2 className="title-font text-3xl md:text-4xl font-bold text-amber-500 uppercase">
           Council Chamber
         </h2>
-        <p className="text-gray-400">Awaiting assembly of all entities.</p>
-        <div className="flex items-center justify-center gap-4 mt-2">
-          <p className="text-gray-500 text-sm">
+        <p className="text-gray-400 text-sm md:text-base mt-1">Awaiting assembly of all entities.</p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mt-2">
+          <p className="text-gray-500 text-xs md:text-sm">
             {gameState.players.length} / 12 players assembled
           </p>
           <div className="flex items-center gap-2">
@@ -193,40 +233,46 @@ const LobbyScreen = () => {
       {/* The Orrery */}
       <div
         ref={orreryRef}
-        className="relative w-full max-w-sm h-auto aspect-square md:max-w-md my-8"
+        className="relative w-full max-w-sm h-auto aspect-square md:max-w-md my-4 md:my-8"
       >
         {/* Central Star (Session Code) */}
         <div
-          className="absolute inset-0 rounded-full flex flex-col items-center justify-center"
+          className="absolute inset-0 rounded-full flex flex-col items-center justify-center p-4"
           style={{ animation: 'orrery-pulse 8s infinite ease-in-out' }}
         >
-          <span className="text-sm text-amber-500 uppercase">Session Code</span>
-          <span className="text-6xl md:text-7xl font-bold tracking-[0.2em] text-gray-200 title-font my-2">
+          <span className="text-xs md:text-sm text-amber-500 uppercase">Session Code</span>
+          <span className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-[0.2em] text-gray-200 title-font my-1 md:my-2">
             {gameState.roomCode}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-2 mt-2">
             <button
-              onClick={copyRoomCode}
-              className="flex items-center gap-2 px-3 py-1 bg-gray-800/50 hover:bg-gray-700/70 rounded-full transition-all hover:scale-105 active:scale-95"
+              onClick={() => {
+                triggerHaptic('light')
+                copyRoomCode()
+              }}
+              className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-800/50 hover:bg-gray-700/70 active:bg-gray-700 rounded-full transition-all active:scale-95 min-h-[44px] md:min-h-0"
             >
               {copied ? (
-                <Icon name="Check" className="w-4 h-4 text-green-400" />
+                <Icon name="Check" className="w-5 h-5 md:w-4 md:h-4 text-green-400" />
               ) : (
-                <Icon name="Copy" className="w-4 h-4" />
+                <Icon name="Copy" className="w-5 h-5 md:w-4 md:h-4" />
               )}
-              <span className="text-xs">{copied ? 'Copied!' : 'Copy Code'}</span>
+              <span className="text-sm md:text-xs font-medium">{copied ? 'Copied!' : 'Copy Code'}</span>
             </button>
             <button
-              onClick={copyLobbyLink}
-              className="flex items-center gap-2 px-3 py-1 bg-amber-600/50 hover:bg-amber-600/70 rounded-full transition-all hover:scale-105 active:scale-95"
+              onClick={() => {
+                triggerHaptic('light')
+                copyLobbyLink()
+              }}
+              className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-amber-600/50 hover:bg-amber-600/70 active:bg-amber-600 rounded-full transition-all active:scale-95 min-h-[44px] md:min-h-0"
               title="Share this link with friends to join instantly"
             >
               {linkCopied ? (
-                <Icon name="Check" className="w-4 h-4 text-green-400" />
+                <Icon name="Check" className="w-5 h-5 md:w-4 md:h-4 text-green-400" />
               ) : (
-                <Icon name="Share2" className="w-4 h-4" />
+                <Icon name="Share2" className="w-5 h-5 md:w-4 md:h-4" />
               )}
-              <span className="text-xs">{linkCopied ? 'Link Copied!' : 'Share Link'}</span>
+              <span className="text-sm md:text-xs font-medium">{linkCopied ? 'Link Copied!' : 'Share Link'}</span>
             </button>
           </div>
         </div>
@@ -240,13 +286,13 @@ const LobbyScreen = () => {
               transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`
             }}
           >
-            <div className="flex flex-col items-center text-center w-20 hover:scale-110 transition-transform duration-300">
+            <div className="flex flex-col items-center text-center w-16 md:w-20 active:scale-95 transition-transform duration-300 touch-manipulation">
               <PlayerAvatar 
                 player={player} 
-                size={48} 
-                className={`border-2 ${isYou ? 'border-fuchsia-500' : 'border-gray-600'}`}
+                size={isMobile ? 40 : 48} 
+                className={`border-2 ${isYou ? 'border-fuchsia-500 ring-2 ring-fuchsia-500/30' : 'border-gray-600'}`}
               />
-              <p className="text-sm font-semibold truncate w-full mt-2">
+              <p className="text-xs md:text-sm font-semibold truncate w-full mt-1 md:mt-2">
                 {player.nickname}
               </p>
             </div>
@@ -255,48 +301,54 @@ const LobbyScreen = () => {
       </div>
 
       {/* Controls Section */}
-      <div className="mt-8 w-full max-w-md flex flex-col gap-4">
+      <div className="mt-4 md:mt-8 w-full max-w-md flex flex-col gap-3 md:gap-4 px-4 md:px-0">
         {isHost ? (
           <div className="text-center">
             <HexButton 
-              onClick={handleStartGame} 
+              onClick={() => {
+                triggerHaptic('medium')
+                handleStartGame()
+              }}
               disabled={!canStart || isStarting} 
               isActive={canStart && !isStarting}
             >
               {isStarting ? 'Starting...' : 'Ignite Session'}
             </HexButton>
             {gameState.players.length < 3 && (
-              <p className="text-yellow-400 text-sm mt-2">
+              <p className="text-yellow-400 text-xs md:text-sm mt-2">
                 At least 3 Entities are required for consensus.
               </p>
             )}
           </div>
         ) : (
-          <p className="text-gray-400 italic text-center animate-pulse">
+          <p className="text-gray-400 italic text-center animate-pulse text-sm md:text-base">
             Awaiting session ignition...
           </p>
         )}
         
         {isHost && (
-          <div className="panel p-4 rounded-md">
-            <h3 className="title-font text-xl font-bold text-amber-500 text-center">
+          <div className="panel p-3 md:p-4 rounded-md">
+            <h3 className="title-font text-lg md:text-xl font-bold text-amber-500 text-center">
               Player Management
             </h3>
-            <div className="mt-3 border-t border-amber-500/20 pt-3">
-              <h4 className="font-semibold text-center text-gray-400 mb-2">
+            <div className="mt-2 md:mt-3 border-t border-amber-500/20 pt-2 md:pt-3">
+              <h4 className="font-semibold text-center text-gray-400 mb-2 text-sm md:text-base">
                 Session Roster
               </h4>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {gameState.players.map(player => (
                   <div 
                     key={player.id}
-                    className="flex items-center justify-between p-2 bg-gray-900/50 rounded-md"
+                    className="flex items-center justify-between p-2 md:p-2 bg-gray-900/50 rounded-md min-h-[44px] md:min-h-0"
                   >
-                    <span className="font-semibold truncate">{player.nickname}</span>
+                    <span className="font-semibold truncate text-sm md:text-base">{player.nickname}</span>
                     {player.id !== me?.id && (
                       <button
-                        onClick={() => setKickConfirmationTarget(player)}
-                        className="px-2 py-1 text-xs bg-red-800 hover:bg-red-700 rounded-md transition"
+                        onClick={() => {
+                          triggerHaptic('light')
+                          setKickConfirmationTarget(player)
+                        }}
+                        className="px-3 py-2 md:px-2 md:py-1 text-xs bg-red-800 hover:bg-red-700 active:bg-red-700 rounded-md transition min-h-[44px] md:min-h-0 touch-manipulation"
                       >
                         Kick
                       </button>
@@ -309,12 +361,15 @@ const LobbyScreen = () => {
         )}
         
         <button
-          onClick={handleToggleChat}
-          className="w-full flex items-center justify-between p-3 bg-gray-800/50 hover:bg-gray-700/70 rounded-md transition group"
+          onClick={() => {
+            triggerHaptic('light')
+            handleToggleChat()
+          }}
+          className="w-full flex items-center justify-between p-4 md:p-3 bg-gray-800/50 hover:bg-gray-700/70 active:bg-gray-700 rounded-md transition group min-h-[56px] md:min-h-0 touch-manipulation"
         >
           <div className="flex items-center gap-3">
-            <Icon name="MessageCircle" className="w-5 h-5 text-amber-500" />
-            <span className="font-semibold text-gray-200">Council Comms</span>
+            <Icon name="MessageCircle" className="w-6 h-6 md:w-5 md:h-5 text-amber-500" />
+            <span className="font-semibold text-gray-200 text-base md:text-base">Council Comms</span>
           </div>
           <span className="text-xs text-gray-500 group-hover:text-gray-400 hidden md:block">
             Press <kbd className="kbd text-xs">T</kbd> or <kbd className="kbd text-xs">/</kbd>
@@ -356,7 +411,16 @@ const LobbyScreen = () => {
             onClick={handleToggleChat}
             className="absolute inset-0 bg-black/60 archive-backdrop-enter"
           />
-          <div className="absolute bottom-0 left-0 right-0 h-[70%] data-slate-enter">
+          <div 
+            className="absolute bottom-0 left-0 right-0 h-[75vh] data-slate-enter transition-transform"
+            style={{ 
+              transform: `translateY(${drawerOffset}px)`,
+              maxHeight: '75vh'
+            }}
+            onTouchStart={handleDrawerTouchStart}
+            onTouchMove={handleDrawerTouchMove}
+            onTouchEnd={handleDrawerTouchEnd}
+          >
             <ChatBox
               isDrawer={true}
               onClose={handleToggleChat}
