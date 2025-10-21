@@ -10,23 +10,26 @@ const app = express()
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  process.env.CLIENT_URL, // Set this in production (e.g., https://your-app.netlify.app)
-]
+  'http://localhost:5173', // Vite default
+  process.env.CLIENT_URL, // Set this in Render (e.g., https://your-app.vercel.app)
+].filter(Boolean) // Remove undefined values
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
+    // Allow requests with no origin (mobile apps, Postman, curl, etc.)
     if (!origin) return callback(null, true)
     
-    // Allow all origins in development or if CLIENT_URL contains wildcard
-    if (process.env.NODE_ENV !== 'production' || allowedOrigins.some(allowed => allowed && allowed.includes('*'))) {
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
       return callback(null, true)
     }
     
+    // In production, check against whitelist
     if (allowedOrigins.includes(origin)) {
       callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'))
+      console.warn(`CORS blocked origin: ${origin}`)
+      callback(new Error(`Not allowed by CORS. Origin: ${origin} not in whitelist.`))
     }
   },
   credentials: true
@@ -35,7 +38,7 @@ app.use(cors({
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: { 
-    origin: allowedOrigins.filter(Boolean),
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
