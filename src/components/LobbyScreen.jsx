@@ -35,6 +35,7 @@ const LobbyScreen = () => {
   }, { enabled: isHost && canStart })
   const colors = ['#A21CAF', '#BE185D', '#0369A1', '#B45309', '#5B21B6', '#15803D']
   const orreryRef = useRef(null)
+  const chatInputRef = useRef(null)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [radius, setRadius] = useState(150)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -108,8 +109,18 @@ const LobbyScreen = () => {
   }
   
   const handleToggleChat = () => setIsChatOpen(!isChatOpen)
+  
+  const handleOpenChat = useCallback(() => {
+    setIsChatOpen(true)
+  }, [])
 
-  // Memoize player orbital calculations for performance
+  // Keyboard shortcuts for lobby
+  useKeyboardShortcut('c', copyRoomCode)
+  useKeyboardShortcut('t', handleOpenChat) // 't' for talk
+  useKeyboardShortcut('/', handleOpenChat) // '/' for chat (common pattern)
+  useKeyboardShortcut('s', () => {
+    if (isHost && canStart) handleStartGame()
+  }, { enabled: isHost && canStart })
   const playerOrbits = useMemo(() => {
     return gameState.players.map((player, index) => ({
       player,
@@ -261,10 +272,15 @@ const LobbyScreen = () => {
         
         <button
           onClick={handleToggleChat}
-          className="w-full flex items-center justify-center gap-3 p-3 bg-gray-800/50 hover:bg-gray-700/70 rounded-md transition"
+          className="w-full flex items-center justify-between p-3 bg-gray-800/50 hover:bg-gray-700/70 rounded-md transition group"
         >
-          <Icon name="MessageCircle" className="w-5 h-5 text-amber-500" />
-          <span className="font-semibold text-gray-200">Council Comms</span>
+          <div className="flex items-center gap-3">
+            <Icon name="MessageCircle" className="w-5 h-5 text-amber-500" />
+            <span className="font-semibold text-gray-200">Council Comms</span>
+          </div>
+          <span className="text-xs text-gray-500 group-hover:text-gray-400 hidden md:block">
+            Press <kbd className="kbd text-xs">T</kbd> or <kbd className="kbd text-xs">/</kbd>
+          </span>
         </button>
       </div>
 
