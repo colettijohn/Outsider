@@ -20,6 +20,7 @@ import ScoreboardScreen from './components/ScoreboardScreen'
 import GameOverScreen from './components/GameOverScreen'
 import FeatureFlagTest from './components/FeatureFlagTest'
 import QuestionCardsTest from './components/QuestionCardsTest'
+import OracleComponentsTest from './components/OracleComponentsTest'
 
 function App() {
   const { 
@@ -162,6 +163,7 @@ function App() {
     // Test pages for development
     featureTest: <FeatureFlagTest />,
     questionCardsTest: <QuestionCardsTest />,
+    oracleComponentsTest: <OracleComponentsTest />,
   }
 
   return (
