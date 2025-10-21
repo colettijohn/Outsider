@@ -97,8 +97,36 @@ const AdminPanelModal = ({
     }
   }
 
-  const screens = ['home', 'customizeGame', 'lobby', 'game', 'debate', 'voting', 'scoreboard', 'gameOver']
+  const screens = [
+    'home', 
+    'quickRitual', 
+    'customizeGame', 
+    'cardBrowser', 
+    'lobby', 
+    'game', 
+    'debate', 
+    'voting', 
+    'scoreboard', 
+    'gameOver'
+  ]
   const anomalyPlayer = gameState.players?.find(p => p.role === 'The Anomaly')
+  
+  // Helper function to format screen names
+  const formatScreenName = (screen) => {
+    const names = {
+      'home': 'Home',
+      'quickRitual': '⚡ Quick Ritual',
+      'customizeGame': '🎴 Full Customize',
+      'cardBrowser': '📚 Card Browser',
+      'lobby': 'Lobby',
+      'game': 'Game',
+      'debate': 'Debate',
+      'voting': 'Voting',
+      'scoreboard': 'Scoreboard',
+      'gameOver': 'Game Over'
+    }
+    return names[screen] || screen.charAt(0).toUpperCase() + screen.slice(1).replace(/([A-Z])/g, ' $1').trim()
+  }
 
   return (
     <div 
@@ -168,9 +196,9 @@ const AdminPanelModal = ({
                     <button 
                       key={screen}
                       onClick={() => onNavigate(screen)}
-                      className="p-2 bg-gray-700 hover:bg-gray-600 rounded-md transition"
+                      className="p-2 bg-gray-700 hover:bg-gray-600 rounded-md transition text-sm"
                     >
-                      {screen.charAt(0).toUpperCase() + screen.slice(1).replace(/([A-Z])/g, ' $1').trim()}
+                      {formatScreenName(screen)}
                     </button>
                   ))}
                 </div>
