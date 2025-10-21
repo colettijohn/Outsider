@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useGame } from '../contexts/GameContext'
+import { isFeatureEnabled } from '../config/features'
 import GlitchyLogo from './GlitchyLogo'
 import CyclingTagline from './CyclingTagline'
 import StatsFooter from './StatsFooter'
@@ -22,7 +23,9 @@ const HomeScreen = ({ onTriggerScribbler, onTriggerKonami, isKonamiArmed }) => {
     handleJoinRoom,
     error,
     setShowRules,
-    setShowAdminLogin
+    setShowAdminLogin,
+    gameState,
+    setGameState
   } = useGame()
   
   const [recentRooms, setRecentRooms] = useState([])
@@ -65,6 +68,21 @@ const HomeScreen = ({ onTriggerScribbler, onTriggerKonami, isKonamiArmed }) => {
     clearRecentRooms()
     setRecentRooms([])
     setShowRecent(false)
+  }
+
+  // Navigate to Quick Ritual or create room directly
+  const handleStartNewSession = () => {
+    if (isFeatureEnabled('NEW_CUSTOMIZE_SCREEN')) {
+      // Create room first, then navigate to Quick Ritual
+      handleCreateRoom()
+      // Navigate to Quick Ritual after room creation
+      setTimeout(() => {
+        setGameState({ ...gameState, screen: 'quickRitual' })
+      }, 100)
+    } else {
+      // Old flow: create room and go to lobby
+      handleCreateRoom()
+    }
   }
 
   return (
@@ -133,13 +151,13 @@ const HomeScreen = ({ onTriggerScribbler, onTriggerKonami, isKonamiArmed }) => {
 
         {/* Primary Action: Start New Session */}
         <button
-          onClick={handleCreateRoom}
+          onClick={handleStartNewSession}
           disabled={!nickname}
           className="w-full p-4 button-primary rounded-md text-xl font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 group"
           title={!nickname ? "Enter a designation first" : "Create a new game session"}
         >
           <Icon name="Rocket" className="w-5 h-5 transition-transform group-hover:translate-y-[-2px]" />
-          Start New Session
+          {isFeatureEnabled('NEW_CUSTOMIZE_SCREEN') ? 'Begin Oracle\'s Ritual' : 'Start New Session'}
         </button>
 
         {/* Join Existing Game - Collapsed by default */}

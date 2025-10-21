@@ -11,39 +11,39 @@ export const FEATURES = {
   // Main toggle - switches entire customize screen
   // When false, uses existing CustomizeGameScreen.jsx
   // When true, uses new Oracle-based experience
-  NEW_CUSTOMIZE_SCREEN: false,
+  NEW_CUSTOMIZE_SCREEN: true,  // ✅ ENABLED - The Oracle's Ritual is LIVE!
   
   // Sub-features (only work if NEW_CUSTOMIZE_SCREEN is true)
   
   // AI-powered recommendations in Quick Ritual
-  ORACLE_AI: false,
+  ORACLE_AI: true,  // ✅ ENABLED
   
   // Card-based individual question browser
-  CARD_SYSTEM: false,
+  CARD_SYSTEM: true,  // ✅ ENABLED
   
   // Fast 3-question setup flow
-  QUICK_RITUAL: false,
+  QUICK_RITUAL: true,  // ✅ ENABLED
   
   // Text-to-speech for Oracle with mystical voice
-  VOICE_OF_ORACLE: false,
+  VOICE_OF_ORACLE: false,  // Not implemented yet
   
   // Mobile gesture controls (swipe, shake, long-press)
-  GESTURE_CONTROLS: false,
+  GESTURE_CONTROLS: false,  // Not implemented yet
   
   // Popular presets, trending decks, social features
-  SOCIAL_FEATURES: false,
+  SOCIAL_FEATURES: false,  // Not implemented yet
   
   // Progression levels, achievements, stats
-  GAMIFICATION: false,
+  GAMIFICATION: false,  // Not implemented yet
   
   // Preview theater - simulate game rounds
-  PREVIEW_THEATER: false,
+  PREVIEW_THEATER: false,  // Not implemented yet
   
   // Advanced particle effects and animations
-  ENHANCED_PARTICLES: false,
+  ENHANCED_PARTICLES: true,  // ✅ ENABLED
   
   // Sound effects and ambient audio
-  SOUND_EFFECTS: false
+  SOUND_EFFECTS: true  // ✅ ENABLED
 }
 
 /**
