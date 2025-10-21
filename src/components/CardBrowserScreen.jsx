@@ -17,7 +17,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react'
 import { useGame } from '../contexts/GameContext'
-import { OracleButton, OracleCard, ParticleEffect } from './oracle'
+import { ParticleEffect } from './oracle'
+import { EnhancedOracleButton as OracleButton, EnhancedOracleCard as OracleCard } from './oracle/EnhancedComponents'
+import { sounds } from '../utils/sounds'
+import { haptics } from '../utils/haptics'
 import { questionCards, CATEGORY_METADATA } from '../data/questionCards'
 import { oracleAI } from '../services/OracleAI'
 import Icon from './Icon'
@@ -192,7 +195,17 @@ export default function CardBrowserScreen() {
 
             {/* Collection Drawer Toggle */}
             <button
-              onClick={() => setShowDrawer(!showDrawer)}
+              onClick={() => {
+                const newState = !showDrawer
+                setShowDrawer(newState)
+                if (newState) {
+                  sounds.drawerOpen()
+                  haptics.drawer()
+                } else {
+                  sounds.drawerClose()
+                  haptics.light()
+                }
+              }}
               className={`
                 relative px-4 py-2 rounded-lg border-2 transition-all
                 ${selectedCards.length > 0

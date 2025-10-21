@@ -19,7 +19,10 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useGame } from '../contexts/GameContext'
-import { OracleOrb, OracleButton, OracleSlider, OracleCard, ParticleEffect } from './oracle'
+import { OracleOrb, ParticleEffect } from './oracle'
+import { EnhancedOracleButton as OracleButton, EnhancedOracleSlider as OracleSlider, EnhancedOracleCard as OracleCard } from './oracle/EnhancedComponents'
+import { sounds } from '../utils/sounds'
+import { haptics } from '../utils/haptics'
 import { oracleAI } from '../services/OracleAI'
 
 export default function QuickRitualScreen() {
@@ -59,23 +62,28 @@ export default function QuickRitualScreen() {
     // Step 1: Greeting
     setOracleState('idle')
     setOracleMessage(oracleAI.speak('greeting'))
+    sounds.shimmer()
+    haptics.light()
     
     stepTimerRef.current = setTimeout(() => {
       setStep('q1')
       setOracleState('listening')
       setOracleMessage("Tell me, how serious should this gathering be? Light-hearted fun or deep contemplation?")
+      sounds.whoosh()
     }, 3000)
   }
 
   const handleSliderComplete = (questionNum) => {
     if (questionNum === 1) {
       // Move to question 2
+      sounds.whoosh()
       stepTimerRef.current = setTimeout(() => {
         setStep('q2')
         setOracleMessage("And how much time do the entities have? A quick spark or an epic journey?")
       }, 800)
     } else if (questionNum === 2) {
       // Move to question 3
+      sounds.whoosh()
       stepTimerRef.current = setTimeout(() => {
         setStep('q3')
         setOracleMessage("Finally, how bold should these questions be? Safe waters or uncharted territory?")
@@ -90,6 +98,8 @@ export default function QuickRitualScreen() {
     setStep('thinking')
     setOracleState('thinking')
     setOracleMessage(oracleAI.speak('thinking'))
+    sounds.thinking()
+    haptics.thinking()
     
     // Simulate AI processing
     stepTimerRef.current = setTimeout(() => {
@@ -102,6 +112,8 @@ export default function QuickRitualScreen() {
       setStep('revealing')
       setOracleState('revealing')
       setOracleMessage(result.reasoning)
+      sounds.reveal()
+      haptics.reveal()
       
       // Start card reveal animation
       setTimeout(() => {
@@ -117,6 +129,8 @@ export default function QuickRitualScreen() {
     const interval = setInterval(() => {
       if (index < 6) { // Show first 6 cards
         setCardRevealIndex(index + 1)
+        sounds.pop()
+        haptics.light()
         index++
       } else {
         clearInterval(interval)
@@ -125,6 +139,8 @@ export default function QuickRitualScreen() {
           setStep('confirmation')
           setOracleState('celebrating')
           setOracleMessage("Excellent! These cosmic decrees are ready. Shall we begin the ritual?")
+          sounds.celebration()
+          haptics.celebration()
         }, 1000)
       }
     }, 400)

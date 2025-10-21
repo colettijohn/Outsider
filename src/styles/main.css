@@ -1,3 +1,6 @@
+/* Import Animations */
+@import './animations.css';
+
 /* Modern CSS Reset */
 *, *::before, *::after {
     box-sizing: border-box;

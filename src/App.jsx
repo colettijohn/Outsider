@@ -27,6 +27,7 @@ import OracleAITest from './components/OracleAITest'
 import OracleOrbTest from './components/OracleOrbTest'
 import QuickRitualTest from './components/QuickRitualTest'
 import CardBrowserTest from './components/CardBrowserTest'
+import PolishTest from './components/PolishTest'
 
 function App() {
   const { 
@@ -176,6 +177,7 @@ function App() {
     oracleOrbTest: <OracleOrbTest />,
     quickRitualTest: <QuickRitualTest />,
     cardBrowserTest: <CardBrowserTest />,
+    polishTest: <PolishTest />,
   }
 
   return (
