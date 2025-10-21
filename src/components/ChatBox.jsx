@@ -26,6 +26,7 @@ const formatRelativeTime = (timestamp) => {
  * @param {boolean} isDrawer - Whether to display as a mobile drawer
  * @param {function} onClose - Close chat callback
  * @param {function} onMouseDown - Mouse down handler for dragging (desktop mode)
+ * @param {boolean} isDragging - Whether chat is currently being dragged
  * @param {object} gameState - Current game state with chat messages
  * @param {object} me - Current player object
  * @param {string} chatInput - Current chat input value
@@ -36,6 +37,7 @@ const ChatBox = ({
   isDrawer = false, 
   onClose, 
   onMouseDown,
+  isDragging = false,
   gameState,
   me,
   chatInput,
@@ -87,13 +89,22 @@ const ChatBox = ({
     <div className={containerClasses}>
       <div className={`panel p-4 rounded-md ${isDrawer ? 'flex flex-col flex-grow h-full rounded-t-2xl' : ''}`}>
         <div 
-          className={`flex items-center justify-center mb-3 relative ${!isDrawer ? 'cursor-move' : ''}`}
+          className={`flex items-center justify-center mb-3 relative ${
+            !isDrawer ? 'cursor-grab active:cursor-grabbing select-none' : ''
+          } ${isDragging ? 'cursor-grabbing' : ''}`}
           onMouseDown={!isDrawer ? onMouseDown : undefined}
         >
+          {!isDrawer && (
+            <div className="absolute left-1/2 -translate-x-1/2 top-1 flex gap-1">
+              <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+            </div>
+          )}
           {isDrawer && (
             <div className="absolute top-0 w-12 h-1.5 bg-gray-600 rounded-full" />
           )}
-          <h3 className={`title-font text-xl font-bold text-amber-500 text-center ${isDrawer ? 'pt-4' : ''}`}>
+          <h3 className={`title-font text-xl font-bold text-amber-500 text-center ${isDrawer ? 'pt-4' : 'pt-2'}`}>
             Council Comms
           </h3>
           <button 
@@ -107,7 +118,7 @@ const ChatBox = ({
         {/* Message Display */}
         <div 
           ref={messagesContainerRef}
-          className={`overflow-y-auto space-y-3 p-2 bg-gray-900/50 rounded-md mb-3 ${isDrawer ? 'flex-grow' : 'h-64 md:h-80'}`}
+          className={`messages-container overflow-y-auto space-y-3 p-2 bg-gray-900/50 rounded-md mb-3 ${isDrawer ? 'flex-grow' : 'h-64 md:h-80'}`}
         >
           {(gameState.chatMessages || []).length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
@@ -166,7 +177,7 @@ const ChatBox = ({
         </div>
         
         {/* Message Input */}
-        <form onSubmit={handleSendMessage} className="flex flex-col gap-2">
+        <form onSubmit={handleSendMessage} className="chat-input flex flex-col gap-2">
           <div className="flex gap-2">
             <input
               ref={inputRef}

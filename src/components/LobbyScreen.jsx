@@ -43,10 +43,10 @@ const LobbyScreen = () => {
   // State for draggable chat
   const [chatPosition, setChatPosition] = useState({ 
     x: window.innerWidth / 2 - 256, 
-    y: window.innerHeight * 0.5 
+    y: window.innerHeight * 0.3 
   })
   const [isDragging, setIsDragging] = useState(false)
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const dragStartRef = useRef({ x: 0, y: 0, chatX: 0, chatY: 0 })
 
   useEffect(() => {
     const updateRadius = () => {
@@ -74,38 +74,57 @@ const LobbyScreen = () => {
     }
   }, [isMobile])
 
-  // Effect for handling drag logic
+  // Improved drag handling with bounds checking
   useEffect(() => {
+    if (!isDragging) return
+
     const handleMouseMove = (e) => {
-      if (!isDragging) return
-      setChatPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
-      })
+      e.preventDefault()
+      
+      const deltaX = e.clientX - dragStartRef.current.x
+      const deltaY = e.clientY - dragStartRef.current.y
+      
+      let newX = dragStartRef.current.chatX + deltaX
+      let newY = dragStartRef.current.chatY + deltaY
+      
+      // Bounds checking (keep chat panel within viewport)
+      const chatWidth = 512 // max-w-lg
+      const chatHeight = 500 // approximate height
+      const margin = 20
+      
+      newX = Math.max(margin, Math.min(newX, window.innerWidth - chatWidth - margin))
+      newY = Math.max(margin, Math.min(newY, window.innerHeight - chatHeight - margin))
+      
+      setChatPosition({ x: newX, y: newY })
     }
 
     const handleMouseUp = () => {
       setIsDragging(false)
     }
 
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove)
-      window.addEventListener('mouseup', handleMouseUp)
-    }
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isDragging, dragOffset])
+  }, [isDragging])
 
   const handleChatMouseDown = (e) => {
+    // Only allow dragging from the header area
+    if (e.target.closest('.chat-input, .messages-container, button, input')) {
+      return
+    }
+    
+    e.preventDefault()
     setIsDragging(true)
-    const rect = e.currentTarget.parentElement.parentElement.getBoundingClientRect()
-    setDragOffset({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    })
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      chatX: chatPosition.x,
+      chatY: chatPosition.y
+    }
   }
   
   const handleToggleChat = () => setIsChatOpen(!isChatOpen)
@@ -121,14 +140,35 @@ const LobbyScreen = () => {
   useKeyboardShortcut('s', () => {
     if (isHost && canStart) handleStartGame()
   }, { enabled: isHost && canStart })
+  // Calculate orbit positions with constrained circular paths
+  const [orbitTime, setOrbitTime] = useState(0)
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOrbitTime(prev => prev + 0.016) // ~60fps
+    }, 16)
+    return () => clearInterval(interval)
+  }, [])
+  
   const playerOrbits = useMemo(() => {
-    return gameState.players.map((player, index) => ({
-      player,
-      angle: (index / gameState.players.length) * 360,
-      duration: 20 + (index * 5),
-      isYou: player.id === me.id
-    }))
-  }, [gameState.players, me.id])
+    return gameState.players.map((player, index) => {
+      const totalPlayers = gameState.players.length
+      const baseAngle = (index / totalPlayers) * Math.PI * 2
+      const rotationSpeed = 0.05 + (index * 0.02) // Different speeds for visual interest
+      const angle = baseAngle + (orbitTime * rotationSpeed)
+      
+      // Calculate position on circular path with constrained radius
+      const x = Math.cos(angle) * radius
+      const y = Math.sin(angle) * radius
+      
+      return {
+        player,
+        x,
+        y,
+        isYou: player.id === me.id
+      }
+    })
+  }, [gameState.players, me.id, orbitTime, radius])
 
   return (
     <div className="w-full flex flex-col items-center justify-center relative">
@@ -192,17 +232,15 @@ const LobbyScreen = () => {
         </div>
 
         {/* Orbiting Players (Planets) */}
-        {playerOrbits.map(({ player, angle, duration, isYou }) => (
+        {playerOrbits.map(({ player, x, y, isYou }) => (
           <div
             key={player.id}
-            className="orrery-player"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-100"
             style={{
-              '--radius': `${radius}px`,
-              transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg)`,
-              animationDuration: `${duration}s`
+              transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`
             }}
           >
-            <div className="orrery-player-avatar flex flex-col items-center text-center w-20">
+            <div className="flex flex-col items-center text-center w-20 hover:scale-110 transition-transform duration-300">
               <PlayerAvatar 
                 player={player} 
                 size={48} 
@@ -291,7 +329,8 @@ const LobbyScreen = () => {
           style={{
             top: 0,
             left: 0,
-            transform: `translate(${chatPosition.x}px, ${chatPosition.y}px)`
+            transform: `translate(${chatPosition.x}px, ${chatPosition.y}px)`,
+            cursor: isDragging ? 'grabbing' : 'default'
           }}
         >
           <div className="data-slate-enter">
@@ -299,6 +338,7 @@ const LobbyScreen = () => {
               isDrawer={false}
               onClose={handleToggleChat}
               onMouseDown={handleChatMouseDown}
+              isDragging={isDragging}
               gameState={gameState}
               me={me}
               chatInput={chatInput}
