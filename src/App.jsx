@@ -21,6 +21,7 @@ import GameOverScreen from './components/GameOverScreen'
 import FeatureFlagTest from './components/FeatureFlagTest'
 import QuestionCardsTest from './components/QuestionCardsTest'
 import OracleComponentsTest from './components/OracleComponentsTest'
+import OracleAITest from './components/OracleAITest'
 
 function App() {
   const { 
@@ -164,6 +165,7 @@ function App() {
     featureTest: <FeatureFlagTest />,
     questionCardsTest: <QuestionCardsTest />,
     oracleComponentsTest: <OracleComponentsTest />,
+    oracleAITest: <OracleAITest />,
   }
 
   return (
