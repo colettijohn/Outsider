@@ -158,7 +158,7 @@ export default function QuickRitualScreen() {
 
   const handleAdvancedMode = () => {
     // Navigate to full card browser (Phase 4)
-    setGameScreen('customizeGame')
+    setGameScreen('cardBrowser')
   }
 
   const handlePresetSelect = (presetKey) => {

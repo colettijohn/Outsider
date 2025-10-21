@@ -13,6 +13,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import HomeScreen from './components/HomeScreen'
 import CustomizeGameScreen from './components/CustomizeGameScreen'
 import QuickRitualScreen from './components/QuickRitualScreen'
+import CardBrowserScreen from './components/CardBrowserScreen'
 import LobbyScreen from './components/LobbyScreen'
 import GameScreen from './components/GameScreen'
 import DebateScreen from './components/DebateScreen'
@@ -25,6 +26,7 @@ import OracleComponentsTest from './components/OracleComponentsTest'
 import OracleAITest from './components/OracleAITest'
 import OracleOrbTest from './components/OracleOrbTest'
 import QuickRitualTest from './components/QuickRitualTest'
+import CardBrowserTest from './components/CardBrowserTest'
 
 function App() {
   const { 
@@ -159,6 +161,7 @@ function App() {
     home: <HomeScreen onTriggerScribbler={onTriggerScribbler} onTriggerKonami={handleTriggerKonami} isKonamiArmed={isKonamiArmed} />,
     customizeGame: <CustomizeGameScreen />,
     quickRitual: <QuickRitualScreen />,
+    cardBrowser: <CardBrowserScreen />,
     lobby: <LobbyScreen />,
     game: <GameScreen />,
     debate: <DebateScreen />,
@@ -172,6 +175,7 @@ function App() {
     oracleAITest: <OracleAITest />,
     oracleOrbTest: <OracleOrbTest />,
     quickRitualTest: <QuickRitualTest />,
+    cardBrowserTest: <CardBrowserTest />,
   }
 
   return (
