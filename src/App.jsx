@@ -18,6 +18,8 @@ import DebateScreen from './components/DebateScreen'
 import VotingScreen from './components/VotingScreen'
 import ScoreboardScreen from './components/ScoreboardScreen'
 import GameOverScreen from './components/GameOverScreen'
+import FeatureFlagTest from './components/FeatureFlagTest'
+import QuestionCardsTest from './components/QuestionCardsTest'
 
 function App() {
   const { 
@@ -157,6 +159,9 @@ function App() {
     voting: <VotingScreen />,
     scoreboard: <ScoreboardScreen />,
     gameOver: <GameOverScreen />,
+    // Test pages for development
+    featureTest: <FeatureFlagTest />,
+    questionCardsTest: <QuestionCardsTest />,
   }
 
   return (
