@@ -172,9 +172,9 @@ function App() {
       <div className={`grid-container transition-opacity duration-500 ${showScribbler ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <header role="banner">
           {gameState.screen !== 'home' && (
-            <div className="relative flex justify-center items-center py-4 max-w-md mx-auto">
+            <div className="flex flex-col md:flex-row md:relative md:justify-center items-center py-4 max-w-md mx-auto gap-2 md:gap-0 px-4 md:px-0">
               {!showAdminLogin && (
-                <div className="absolute left-0">
+                <div className="md:absolute md:left-0 w-full md:w-auto flex justify-center md:justify-start">
                   <button
                     onClick={() => setShowHomeConfirm(true)}
                     className="hex-button"
