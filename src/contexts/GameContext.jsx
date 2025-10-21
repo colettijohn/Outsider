@@ -30,6 +30,7 @@ export const GameProvider = ({ children }) => {
   const [copied, setCopied] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
   const [message, setMessage] = useState('')
+  const [isConnected, setIsConnected] = useState(true)
   
   // Admin and UI state
   const [isAdmin, setIsAdmin] = useState(false)
@@ -38,6 +39,7 @@ export const GameProvider = ({ children }) => {
   const [showRules, setShowRules] = useState(false)
   const [showAdminLogin, setShowAdminLogin] = useState(false)
   const [kickConfirmationTarget, setKickConfirmationTarget] = useState(null)
+  const [isStarting, setIsStarting] = useState(false)
   
   // Chat state
   const [chatInput, setChatInput] = useState('')
@@ -91,6 +93,14 @@ export const GameProvider = ({ children }) => {
       socketRef.current.on('kicked', () => {
         alert("You have been removed from the session.")
         resetToHome()
+      })
+      socketRef.current.on('connectionStatusChange', ({ isConnected }) => {
+        setIsConnected(isConnected)
+        if (isConnected) {
+          announce('Connection restored.')
+        } else {
+          announce('Connection lost. Attempting to reconnect...', 'assertive')
+        }
       })
     }
 
@@ -270,8 +280,13 @@ export const GameProvider = ({ children }) => {
   }, [nickname, roomCode])
 
   const handleStartGame = useCallback(() => {
+    if (isStarting) return // Prevent double-clicks
+    setIsStarting(true)
     socketRef.current.emit('startGame', { roomCode: gameState.roomCode, forcedRole })
-  }, [gameState.roomCode, forcedRole])
+    
+    // Reset after 2 seconds as a safety (game should transition before this)
+    setTimeout(() => setIsStarting(false), 2000)
+  }, [gameState.roomCode, forcedRole, isStarting])
 
   const handleAnswerSubmit = useCallback((answer) => {
     // Prevent submitting empty answer if timer runs out while typing
@@ -385,6 +400,8 @@ export const GameProvider = ({ children }) => {
     copied,
     message,
     setMessage,
+    isConnected,
+    isStarting,
     isAdmin,
     setIsAdmin,
     forcedRole,

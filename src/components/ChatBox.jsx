@@ -24,11 +24,23 @@ const ChatBox = ({
   handleSendMessage
 }) => {
   const messagesEndRef = useRef(null)
+  const messagesContainerRef = useRef(null)
 
-  // Use 'instant' scrolling for better UX when opening the chat panel
-  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "instant" })
+  // Smart scrolling: only auto-scroll if user was already at bottom
+  const scrollToBottom = () => {
+    const container = messagesContainerRef.current
+    if (!container) return
+    
+    const { scrollTop, scrollHeight, clientHeight } = container
+    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 50
+    
+    // Only auto-scroll if user was already near the bottom (within 50px)
+    if (isNearBottom) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
-  useEffect(scrollToBottom, [gameState.chatMessages, isDrawer])
+  useEffect(scrollToBottom, [gameState.chatMessages])
 
   const containerClasses = isDrawer 
     ? 'w-full h-full flex flex-col bg-gray-800 rounded-t-2xl' 
@@ -56,7 +68,10 @@ const ChatBox = ({
         </div>
         
         {/* Message Display */}
-        <div className={`overflow-y-auto space-y-3 p-2 bg-gray-900/50 rounded-md mb-3 ${isDrawer ? 'flex-grow' : 'h-64 md:h-80'}`}>
+        <div 
+          ref={messagesContainerRef}
+          className={`overflow-y-auto space-y-3 p-2 bg-gray-900/50 rounded-md mb-3 ${isDrawer ? 'flex-grow' : 'h-64 md:h-80'}`}
+        >
           {(gameState.chatMessages || []).map((msg, index) => {
             const player = gameState.players.find(p => p.id === msg.playerId)
             const isYou = msg.playerId === me?.id

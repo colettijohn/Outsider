@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useGame } from '../contexts/GameContext'
 import { useKeyboardShortcut } from '../hooks/useKeyboardShortcut'
 import Icon from './Icon'
@@ -14,6 +14,8 @@ const LobbyScreen = () => {
     gameState,
     me,
     isHost,
+    isConnected,
+    isStarting,
     handleStartGame,
     copyRoomCode,
     copyLobbyLink,
@@ -107,6 +109,16 @@ const LobbyScreen = () => {
   
   const handleToggleChat = () => setIsChatOpen(!isChatOpen)
 
+  // Memoize player orbital calculations for performance
+  const playerOrbits = useMemo(() => {
+    return gameState.players.map((player, index) => ({
+      player,
+      angle: (index / gameState.players.length) * 360,
+      duration: 20 + (index * 5),
+      isYou: player.id === me.id
+    }))
+  }, [gameState.players, me.id])
+
   return (
     <div className="w-full flex flex-col items-center justify-center relative">
       <div className="text-center mb-8">
@@ -114,6 +126,17 @@ const LobbyScreen = () => {
           Council Chamber
         </h2>
         <p className="text-gray-400">Awaiting assembly of all entities.</p>
+        <div className="flex items-center justify-center gap-4 mt-2">
+          <p className="text-gray-500 text-sm">
+            {gameState.players.length} / 12 players assembled
+          </p>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`} />
+            <span className="text-xs text-gray-500">
+              {isConnected ? 'Connected' : 'Reconnecting...'}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* The Orrery */}
@@ -158,35 +181,28 @@ const LobbyScreen = () => {
         </div>
 
         {/* Orbiting Players (Planets) */}
-        {gameState.players.map((player, index) => {
-          const angle = (index / gameState.players.length) * 360
-          const bgColor = colors[player.nickname.charCodeAt(0) % colors.length]
-          const isYou = player.id === me.id
-          const duration = 20 + (index * 5)
-          
-          return (
-            <div
-              key={player.id}
-              className="orrery-player"
-              style={{
-                '--radius': `${radius}px`,
-                transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg)`,
-                animationDuration: `${duration}s`
-              }}
-            >
-              <div className="orrery-player-avatar flex flex-col items-center text-center w-20">
-                <PlayerAvatar 
-                  player={player} 
-                  size={48} 
-                  className={`border-2 ${isYou ? 'border-fuchsia-500' : 'border-gray-600'}`}
-                />
-                <p className="text-sm font-semibold truncate w-full mt-2">
-                  {player.nickname}
-                </p>
-              </div>
+        {playerOrbits.map(({ player, angle, duration, isYou }) => (
+          <div
+            key={player.id}
+            className="orrery-player"
+            style={{
+              '--radius': `${radius}px`,
+              transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg)`,
+              animationDuration: `${duration}s`
+            }}
+          >
+            <div className="orrery-player-avatar flex flex-col items-center text-center w-20">
+              <PlayerAvatar 
+                player={player} 
+                size={48} 
+                className={`border-2 ${isYou ? 'border-fuchsia-500' : 'border-gray-600'}`}
+              />
+              <p className="text-sm font-semibold truncate w-full mt-2">
+                {player.nickname}
+              </p>
             </div>
-          )
-        })}
+          </div>
+        ))}
       </div>
 
       {/* Controls Section */}
@@ -195,10 +211,10 @@ const LobbyScreen = () => {
           <div className="text-center">
             <HexButton 
               onClick={handleStartGame} 
-              disabled={!canStart} 
-              isActive={canStart}
+              disabled={!canStart || isStarting} 
+              isActive={canStart && !isStarting}
             >
-              Ignite Session
+              {isStarting ? 'Starting...' : 'Ignite Session'}
             </HexButton>
             {gameState.players.length < 3 && (
               <p className="text-yellow-400 text-sm mt-2">

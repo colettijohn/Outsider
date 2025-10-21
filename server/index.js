@@ -153,6 +153,9 @@ io.on('connection', (socket) => {
     if (!room) {
       return socket.emit('error', 'Invalid session code.')
     }
+    if (room.screen !== 'lobby' && room.screen !== 'customizeGame') {
+      return socket.emit('error', 'Game already in progress. Please wait for it to finish.')
+    }
     if ((room.players || []).length >= 12) {
       return socket.emit('error', 'Session is full.')
     }

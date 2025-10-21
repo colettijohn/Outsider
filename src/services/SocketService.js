@@ -10,6 +10,15 @@ class SocketService {
 
     this.socket.on('connect', () => {
       this.id = this.socket.id
+      this.events['connectionStatusChange']?.({ isConnected: true })
+    })
+
+    this.socket.on('disconnect', () => {
+      this.events['connectionStatusChange']?.({ isConnected: false })
+    })
+
+    this.socket.on('reconnect', () => {
+      this.events['connectionStatusChange']?.({ isConnected: true })
     })
 
     this.socket.on('connected', (payload) => {
