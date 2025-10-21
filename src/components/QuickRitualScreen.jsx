@@ -26,7 +26,7 @@ import { haptics } from '../utils/haptics'
 import { oracleAI } from '../services/OracleAI'
 
 export default function QuickRitualScreen() {
-  const { setGameScreen, updateGameSettings } = useGame()
+  const { setGameScreen, updateGameSettings, handleCreateRoom, nickname } = useGame()
   
   // Flow state
   const [step, setStep] = useState('greeting') // greeting, q1, q2, q3, thinking, revealing, confirmation
@@ -50,6 +50,11 @@ export default function QuickRitualScreen() {
 
   // Flow sequence
   useEffect(() => {
+    // Create room when entering Quick Ritual
+    if (nickname) {
+      handleCreateRoom({ preventDefault: () => {} })
+    }
+    
     startRitual()
     return () => {
       if (stepTimerRef.current) {
