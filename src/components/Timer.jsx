@@ -9,7 +9,12 @@ const Timer = ({ initialTime, onTimeOut }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime)
   const strokeDasharray = 2 * Math.PI * 18
 
-  // This useEffect hook sets up a robust, one-time timer that is immune to re-renders.
+  // This useEffect hook sets up a robust timer that resets when initialTime changes.
+  useEffect(() => {
+    // Reset timeLeft when initialTime changes (new game phase)
+    setTimeLeft(initialTime)
+  }, [initialTime])
+
   useEffect(() => {
     // If the timer has already hit zero, do nothing.
     if (timeLeft <= 0) return
@@ -33,7 +38,7 @@ const Timer = ({ initialTime, onTimeOut }) => {
 
     // Cleanup function to clear the interval when the component unmounts.
     return () => clearInterval(intervalId)
-  }, [onTimeOut]) // We only need onTimeOut here as initialTime is only used once.
+  }, [timeLeft, onTimeOut])
 
   const percentage = (timeLeft / initialTime)
   const strokeDashoffset = strokeDasharray * (1 - percentage)

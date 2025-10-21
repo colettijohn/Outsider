@@ -2,6 +2,7 @@ import express from 'express'
 import http from 'http'
 import cors from 'cors'
 import { Server } from 'socket.io'
+import { sanitizeNickname, sanitizeChatMessage, sanitizeAnswer } from './utils/sanitize.js'
 
 const app = express()
 
@@ -96,9 +97,22 @@ io.on('connection', (socket) => {
   socket.emit('connected', { id: socket.id })
 
   socket.on('createRoom', ({ nickname }) => {
-    socket.data.nickname = nickname
+    const sanitizedNickname = sanitizeNickname(nickname)
+    if (!sanitizedNickname) {
+      return socket.emit('error', 'Invalid nickname.')
+    }
+    
+    socket.data.nickname = sanitizedNickname
     let roomCode = generateRoomCode()
-    while (rooms.has(roomCode)) roomCode = generateRoomCode()
+    let attempts = 0
+    while (rooms.has(roomCode) && attempts < 100) {
+      roomCode = generateRoomCode()
+      attempts++
+    }
+    
+    if (attempts >= 100) {
+      return socket.emit('error', 'Unable to create room. Please try again.')
+    }
 
     const player = getPlayer(socket)
     player.isHost = true
@@ -129,7 +143,12 @@ io.on('connection', (socket) => {
   })
 
   socket.on('joinRoom', ({ nickname, roomCode }) => {
-    socket.data.nickname = nickname
+    const sanitizedNickname = sanitizeNickname(nickname)
+    if (!sanitizedNickname) {
+      return socket.emit('error', 'Invalid nickname.')
+    }
+    
+    socket.data.nickname = sanitizedNickname
     const room = rooms.get(roomCode)
     if (!room) {
       return socket.emit('error', 'Invalid session code.')
@@ -155,6 +174,13 @@ io.on('connection', (socket) => {
     else anomalyId = pickRandom(players).id
 
     const answerTime = room.gameSettings?.customTimers?.answer || 60
+    
+    // Clear any existing grace period timeout
+    if (room.gracePeriodTimeout) {
+      clearInterval(room.gracePeriodTimeout)
+      room.gracePeriodTimeout = null
+    }
+    
     room.round = 1
     room.timer = answerTime
     room.screen = 'game'
@@ -163,24 +189,106 @@ io.on('connection', (socket) => {
     room.answers = []
     room.votes = []
     room.readyPlayerIds = []
+    room.gracePeriodActive = false
+    room.gracePeriodTimeLeft = null
     emitState(roomCode)
   })
 
   socket.on('submitAnswer', ({ roomCode, answer }) => {
     const room = rooms.get(roomCode)
     if (!room) return
-    room.answers = room.answers || []
+    
+    const sanitizedAnswer = sanitizeAnswer(answer)
+    if (!sanitizedAnswer) {
+      return socket.emit('error', 'Invalid answer.')
+    }
+    
+    // Ensure answers array exists
+    if (!Array.isArray(room.answers)) {
+      room.answers = []
+    }
+    
+    // Add or update player's answer
     const existing = room.answers.find(a => a.playerId === socket.id)
-    if (existing) existing.answer = answer
-    else room.answers.push({ playerId: socket.id, answer })
-
-    // Auto-advance to debate when all (humans+bots) answered in future; for now, rely on client flow or simple trigger.
-    // Move to debate immediately for parity with MockSocket
-    const debateTime = room.gameSettings?.customTimers?.debate || 60
-    room.screen = 'debate'
-    room.timer = debateTime
-    room.readyPlayerIds = []
+    if (existing) {
+      existing.answer = sanitizedAnswer
+    } else {
+      room.answers.push({ playerId: socket.id, answer: sanitizedAnswer })
+    }
+    
+    // Update the room in the Map
+    rooms.set(roomCode, room)
+    
+    // Emit state to all players
     emitState(roomCode)
+
+    // Check submission progress
+    const humanPlayers = room.players.filter(p => !p.isBot)
+    const answeredCount = humanPlayers.filter(p => room.answers.some(a => a.playerId === p.id)).length
+    const totalHumans = humanPlayers.length
+    const percentageAnswered = totalHumans > 0 ? (answeredCount / totalHumans) : 0
+    
+    // Check if all human players have answered
+    const allAnswered = answeredCount === totalHumans
+    
+    if (allAnswered) {
+      // Clear any existing grace period timeout
+      if (room.gracePeriodTimeout) {
+        clearTimeout(room.gracePeriodTimeout)
+        room.gracePeriodTimeout = null
+      }
+      
+      // Immediately advance to debate when all humans have answered
+      const debateTime = room.gameSettings?.customTimers?.debate || 60
+      room.screen = 'debate'
+      room.timer = debateTime
+      room.readyPlayerIds = []
+      room.gracePeriodActive = false
+      room.gracePeriodTimeLeft = null
+      emitState(roomCode)
+    } else if (percentageAnswered >= 0.5 && !room.gracePeriodActive) {
+      // 50% threshold reached - start 10 second grace period
+      room.gracePeriodActive = true
+      room.gracePeriodTimeLeft = 10
+      
+      // Clear any existing timeout
+      if (room.gracePeriodTimeout) {
+        clearTimeout(room.gracePeriodTimeout)
+      }
+      
+      // Emit initial state with grace period
+      emitState(roomCode)
+      
+      // Start countdown interval (1 second ticks)
+      const countdownInterval = setInterval(() => {
+        const currentRoom = rooms.get(roomCode)
+        if (!currentRoom || currentRoom.screen !== 'game') {
+          clearInterval(countdownInterval)
+          return
+        }
+        
+        currentRoom.gracePeriodTimeLeft = (currentRoom.gracePeriodTimeLeft || 0) - 1
+        
+        if (currentRoom.gracePeriodTimeLeft <= 0) {
+          clearInterval(countdownInterval)
+          
+          // Grace period expired - advance to debate
+          const debateTime = currentRoom.gameSettings?.customTimers?.debate || 60
+          currentRoom.screen = 'debate'
+          currentRoom.timer = debateTime
+          currentRoom.readyPlayerIds = []
+          currentRoom.gracePeriodActive = false
+          currentRoom.gracePeriodTimeLeft = null
+          emitState(roomCode)
+        } else {
+          // Update countdown
+          emitState(roomCode)
+        }
+      }, 1000)
+      
+      // Store interval reference for cleanup
+      room.gracePeriodTimeout = countdownInterval
+    }
   })
 
   socket.on('readyForVote', () => {
@@ -208,10 +316,22 @@ io.on('connection', (socket) => {
     else room.votes.push({ voterId: socket.id, votedPlayerId })
     emitState(roomCode)
 
-    // After brief delay, tally and move to scoreboard/gameOver
-    setTimeout(() => {
-      tallyVotesAndScore(roomCode)
-    }, 1500)
+    // Check if all human players have voted
+    const humanPlayers = room.players.filter(p => !p.isBot)
+    const allVoted = humanPlayers.every(p => room.votes.some(v => v.voterId === p.id))
+    
+    if (allVoted) {
+      // Clear any existing tally timeout to prevent race condition
+      if (room.tallyTimeout) {
+        clearTimeout(room.tallyTimeout)
+      }
+      
+      // Schedule vote tallying
+      room.tallyTimeout = setTimeout(() => {
+        tallyVotesAndScore(roomCode)
+        room.tallyTimeout = null
+      }, 1500)
+    }
   })
 
   socket.on('nextRound', ({ roomCode }) => {
@@ -220,6 +340,13 @@ io.on('connection', (socket) => {
     const players = room.players || []
     const anomalyId = pickRandom(players).id
     const answerTime = room.gameSettings?.customTimers?.answer || 60
+    
+    // Clear any existing grace period timeout
+    if (room.gracePeriodTimeout) {
+      clearInterval(room.gracePeriodTimeout)
+      room.gracePeriodTimeout = null
+    }
+    
     room.round = (room.round || 1) + 1
     room.timer = answerTime
     room.screen = 'game'
@@ -228,6 +355,8 @@ io.on('connection', (socket) => {
     room.answers = []
     room.votes = []
     room.readyPlayerIds = []
+    room.gracePeriodActive = false
+    room.gracePeriodTimeLeft = null
     emitState(roomCode)
   })
 
@@ -277,10 +406,39 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', ({ message }) => {
     const roomCode = socket.data.roomCode
+    if (!roomCode) return
+    
     const room = rooms.get(roomCode)
     if (!room) return
-    room.chatMessages = room.chatMessages || []
-    room.chatMessages.push({ playerId: socket.id, nickname: socket.data.nickname, text: message, timestamp: new Date().toISOString() })
+    
+    const sanitizedMessage = sanitizeChatMessage(message)
+    if (!sanitizedMessage) return // Ignore empty messages
+    
+    // Ensure chatMessages array exists
+    if (!Array.isArray(room.chatMessages)) {
+      room.chatMessages = []
+    }
+    
+    // Create new message object
+    const newMessage = { 
+      playerId: socket.id, 
+      nickname: socket.data.nickname, 
+      text: sanitizedMessage, 
+      timestamp: new Date().toISOString() 
+    }
+    
+    // Add message to array (this mutates the room object which is in the Map)
+    room.chatMessages.push(newMessage)
+    
+    // Limit chat history to last 100 messages to prevent memory issues
+    if (room.chatMessages.length > 100) {
+      room.chatMessages = room.chatMessages.slice(-100)
+    }
+    
+    // Update the room in the Map (even though we're mutating, this ensures consistency)
+    rooms.set(roomCode, room)
+    
+    // Broadcast updated state to all players in room
     emitState(roomCode)
   })
 
@@ -297,8 +455,17 @@ io.on('connection', (socket) => {
         const newHost = room.players.find(p => !p.isBot) || room.players[0]
         if (newHost) newHost.isHost = true
       }
-      // If room empty, delete
-      if (room.players.length === 0) rooms.delete(roomCode)
+      // If room empty, clean up and delete
+      if (room.players.length === 0) {
+        // Clean up any active timers
+        if (room.gracePeriodTimeout) {
+          clearInterval(room.gracePeriodTimeout)
+        }
+        if (room.tallyTimeout) {
+          clearTimeout(room.tallyTimeout)
+        }
+        rooms.delete(roomCode)
+      }
       else emitState(roomCode)
     }
   })
@@ -308,11 +475,15 @@ function tallyVotesAndScore(roomCode) {
   const room = rooms.get(roomCode)
   if (!room) return
   const votes = room.votes || []
-  const counts = votes.reduce((acc, v) => {
-    if (!v.votedPlayerId) return acc
+  
+  // Filter out null/undefined votes
+  const validVotes = votes.filter(v => v.votedPlayerId)
+  
+  const counts = validVotes.reduce((acc, v) => {
     acc[v.votedPlayerId] = (acc[v.votedPlayerId] || 0) + 1
     return acc
   }, {})
+  
   let eliminatedPlayerId = null
   let max = 0
   let ties = []
@@ -333,7 +504,7 @@ function tallyVotesAndScore(roomCode) {
     if (p.role === 'The Anomaly' && !anomalyWasVotedOut) gain += 2
     if (p.role === 'Entity') {
       if (anomalyWasVotedOut) gain += 1
-      const ownVote = votes.find(v => v.voterId === p.id)
+      const ownVote = validVotes.find(v => v.voterId === p.id)
       if (ownVote && ownVote.votedPlayerId === anomalyId) gain += 1
     }
     scoreUpdates[p.id] = gain

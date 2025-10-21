@@ -28,6 +28,13 @@ const GameScreen = () => {
   }, [handleAnswerSubmit])
 
   const questionText = isAnomaly ? gameState.question.impostor : gameState.question.crew
+  
+  // Calculate submission progress
+  const humanPlayers = (gameState.players || []).filter(p => !p.isBot)
+  const answeredCount = humanPlayers.filter(p => (gameState.answers || []).some(a => a.playerId === p.id)).length
+  const totalHumans = humanPlayers.length
+  const gracePeriodActive = gameState.gracePeriodActive
+  const gracePeriodTimeLeft = gameState.gracePeriodTimeLeft
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row gap-8">
@@ -103,6 +110,45 @@ const GameScreen = () => {
           <h3 className="title-font text-xl font-bold text-amber-500 text-center mb-4">
             Council Roster
           </h3>
+          
+          {/* Grace Period Warning */}
+          {gracePeriodActive && gracePeriodTimeLeft !== null && (
+            <div className="mb-4 p-3 bg-orange-900/50 border-2 border-orange-500 rounded-md animate-pulse">
+              <div className="flex items-center justify-between mb-2">
+                <Icon name="AlertTriangle" className="w-5 h-5 text-orange-400" />
+                <span className="text-orange-400 font-bold title-font">AUTO-ADVANCE</span>
+                <Icon name="AlertTriangle" className="w-5 h-5 text-orange-400" />
+              </div>
+              <p className="text-center text-sm text-orange-300 mb-1">
+                50% threshold reached!
+              </p>
+              <p className="text-center text-2xl font-bold text-orange-400 title-font">
+                {gracePeriodTimeLeft}s
+              </p>
+              <p className="text-center text-xs text-orange-300 mt-1">
+                Submit now or auto-advance
+              </p>
+            </div>
+          )}
+          
+          {/* Progress Indicator */}
+          <div className="mb-4 p-2 bg-gray-900/50 rounded-md">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm text-gray-400">Submissions:</span>
+              <span className="text-sm font-bold text-amber-400">
+                {answeredCount}/{totalHumans}
+              </span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div 
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  answeredCount / totalHumans >= 0.5 ? 'bg-orange-500' : 'bg-amber-500'
+                }`}
+                style={{ width: `${totalHumans > 0 ? (answeredCount / totalHumans) * 100 : 0}%` }}
+              />
+            </div>
+          </div>
+          
           <div className="space-y-3">
             {(gameState.players || []).map(player => {
               const hasAnswered = (gameState.answers || []).some(a => a.playerId === player.id)

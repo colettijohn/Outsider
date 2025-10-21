@@ -9,6 +9,7 @@ import CosmicScribblerCanvas from './components/CosmicScribblerCanvas'
 import AdminPanelModal from './components/AdminPanelModal'
 import HowToPlayModal from './components/HowToPlayModal'
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal'
+import ErrorBoundary from './components/ErrorBoundary'
 import HomeScreen from './components/HomeScreen'
 import CustomizeGameScreen from './components/CustomizeGameScreen'
 import LobbyScreen from './components/LobbyScreen'
@@ -159,13 +160,14 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      {/* Skip to content link for accessibility */}
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
+    <ErrorBoundary onReset={resetToHome}>
+      <div className="app-container">
+        {/* Skip to content link for accessibility */}
+        <a href="#main-content" className="skip-to-content">
+          Skip to main content
+        </a>
 
-      <AnimatedCosmicBackground mousePosition={mousePosition} />
+        <AnimatedCosmicBackground mousePosition={mousePosition} />
       
       <div className={`grid-container transition-opacity duration-500 ${showScribbler ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <header role="banner">
@@ -269,7 +271,8 @@ function App() {
       )}
       
       {showRules && <HowToPlayModal onClose={() => setShowRules(false)} />}
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
 

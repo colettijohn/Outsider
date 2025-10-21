@@ -143,13 +143,16 @@ class MockSocket {
                     return { playerId: bot.id, answer: answer }
                 })
 
+                // Bots always auto-submit in MockSocket, so we go directly to debate
                 const debateTime = this.currentGameState.gameSettings?.customTimers?.debate || 60
                 this.currentGameState = {
                     ...this.currentGameState,
                     screen: 'debate',
                     timer: debateTime,
                     answers: [myAnswer, ...botAnswers],
-                    readyPlayerIds: [] // Initialize ready players list
+                    readyPlayerIds: [], // Initialize ready players list
+                    gracePeriodActive: false,
+                    gracePeriodTimeLeft: null
                 }
                 this.events['updateGameState'](this.currentGameState)
                 break
@@ -173,9 +176,10 @@ class MockSocket {
                     }
                 }
 
+                const avatarCount = 12
                 const usedIndices = this.currentGameState.players.map(p => p.avatarIndex)
-                let nextIndex = 0
-                while (usedIndices.includes(nextIndex)) { nextIndex++ }
+                const availableIndices = Array.from({ length: avatarCount }, (_, i) => i).filter(i => !usedIndices.includes(i))
+                const nextIndex = availableIndices.length > 0 ? availableIndices[0] : Math.floor(Math.random() * avatarCount)
 
                 const newBot = { id: crypto.randomUUID(), nickname: `Bot ${newBotName}`, isHost: false, score: 0, isBot: true, avatarIndex: nextIndex }
 
