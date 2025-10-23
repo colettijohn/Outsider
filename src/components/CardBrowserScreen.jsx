@@ -513,17 +513,92 @@ export default function CardBrowserScreen() {
 
                 {/* Icon */}
                 <div className="flex justify-center mb-4 relative z-10">
-                  <div className={`
-                    w-20 h-20 rounded-full flex items-center justify-center
-                    transition-all duration-300 transform
-                    ${isSelected 
-                      ? 'bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/50 scale-110' 
-                      : 'bg-purple-900/40 group-hover:bg-purple-800/60 group-hover:scale-110'
-                    }
-                  `}>
-                    <Icon name={constellation.icon} size={36} />
+                  <div className="relative w-24 h-24">
+                    {/* Hexagonal cosmic frame */}
+                    <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+                      {/* Outer hexagon with glow */}
+                      <defs>
+                        <linearGradient id={`hex-gradient-${constellation.name}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor={isSelected ? "#a78bfa" : "#581c87"} stopOpacity="0.8" />
+                          <stop offset="50%" stopColor={isSelected ? "#c084fc" : "#7c3aed"} stopOpacity="1" />
+                          <stop offset="100%" stopColor={isSelected ? "#e879f9" : "#6b21a8"} stopOpacity="0.8" />
+                        </linearGradient>
+                        <filter id={`hex-glow-${constellation.name}`}>
+                          <feGaussianBlur stdDeviation={isSelected ? "3" : "1.5"} result="coloredBlur"/>
+                          <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      
+                      {/* Rotating outer ring */}
+                      <polygon
+                        points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                        fill="none"
+                        stroke={`url(#hex-gradient-${constellation.name})`}
+                        strokeWidth={isSelected ? "2" : "1.5"}
+                        className="transition-all duration-500"
+                        style={{
+                          filter: `url(#hex-glow-${constellation.name})`,
+                          animation: isSelected ? 'rotate-hex 8s linear infinite' : 'none',
+                          transformOrigin: 'center',
+                          opacity: isSelected ? 0.8 : 0.5
+                        }}
+                      />
+                      
+                      {/* Inner hexagon */}
+                      <polygon
+                        points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5"
+                        fill={isSelected 
+                          ? 'url(#hex-gradient-' + constellation.name + ')' 
+                          : 'rgba(88, 28, 135, 0.3)'}
+                        stroke={isSelected ? "#c084fc" : "#7c3aed"}
+                        strokeWidth="1"
+                        className="transition-all duration-500"
+                        style={{
+                          filter: isSelected ? 'drop-shadow(0 0 8px rgba(192,132,252,0.6))' : 'none'
+                        }}
+                      />
+                      
+                      {/* Corner accent dots */}
+                      {[
+                        { x: 50, y: 5 },
+                        { x: 90, y: 27.5 },
+                        { x: 90, y: 72.5 },
+                        { x: 50, y: 95 },
+                        { x: 10, y: 72.5 },
+                        { x: 10, y: 27.5 }
+                      ].map((point, idx) => (
+                        <circle
+                          key={idx}
+                          cx={point.x}
+                          cy={point.y}
+                          r={isSelected ? "2.5" : "1.5"}
+                          fill={isSelected ? "#e0b3ff" : "#a78bfa"}
+                          className="transition-all duration-500"
+                          style={{
+                            filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'none',
+                            animation: isSelected ? `twinkle 2s ease-in-out infinite ${idx * 0.2}s` : 'none'
+                          }}
+                        />
+                      ))}
+                    </svg>
+                    
+                    {/* Icon centered */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Icon name={constellation.icon} size={36} className={`transition-all duration-500 ${isSelected ? 'scale-110' : ''}`} />
+                    </div>
                   </div>
                 </div>
+
+                {/* Add rotation keyframe */}
+                <style>{`
+                  @keyframes rotate-hex {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                  }
+                `}</style>
 
                 {/* Name */}
                 <h3 className="text-xl sm:text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent relative z-10">
