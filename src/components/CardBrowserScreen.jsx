@@ -410,51 +410,11 @@ export default function CardBrowserScreen() {
   // Quick preset configurations
   const presetConfigs = [
     {
-      name: 'Ice Breaker',
-      emoji: '🧊',
-      categories: ['Daily Routines', 'Food & Drink', 'Wild Cards'],
-      color: 'from-cyan-500/40 to-blue-600/40 border-cyan-400/50 hover:from-cyan-400/50 hover:to-blue-500/50 hover:shadow-cyan-500/50',
-      description: 'Light & fun - perfect for getting to know people',
-      questionCount: 15
-    },
-    {
-      name: 'Deep Dive',
-      emoji: '🌊',
-      categories: ['Deep Thoughts', 'Personality & Psyche', 'History & Mythology'],
-      color: 'from-blue-600/40 to-indigo-700/40 border-blue-400/50 hover:from-blue-500/50 hover:to-indigo-600/50 hover:shadow-blue-500/50',
-      description: 'Philosophical & introspective conversations',
-      questionCount: 15
-    },
-    {
-      name: 'Creative Minds',
-      emoji: '🎨',
-      categories: ['Arts & Literature', 'Hypotheticals', 'Science & Nature'],
-      color: 'from-purple-600/40 to-pink-600/40 border-purple-400/50 hover:from-purple-500/50 hover:to-pink-500/50 hover:shadow-purple-500/50',
-      description: 'Imagination, creativity & what-ifs',
-      questionCount: 15
-    },
-    {
-      name: 'Party Mode',
-      emoji: '🎉',
-      categories: ['Wild Cards', 'Food & Drink', 'Travel & Geography', 'Objects & Places'],
-      color: 'from-yellow-500/40 to-orange-600/40 border-yellow-400/50 hover:from-yellow-400/50 hover:to-orange-500/50 hover:shadow-yellow-500/50',
-      description: 'Energetic & entertaining - great for groups',
-      questionCount: 20
-    },
-    {
-      name: 'Future Forward',
-      emoji: '🚀',
-      categories: ['Technology & Future', 'Science & Nature', 'Hypotheticals'],
-      color: 'from-emerald-500/40 to-teal-600/40 border-emerald-400/50 hover:from-emerald-400/50 hover:to-teal-500/50 hover:shadow-emerald-500/50',
-      description: 'Technology, innovation & the future',
-      questionCount: 15
-    },
-    {
       name: 'Full Experience',
       emoji: '⭐',
       categories: Object.keys(questionData).filter(cat => questionData[cat].length > 0),
       color: 'from-violet-600/40 to-fuchsia-600/40 border-violet-400/50 hover:from-violet-500/50 hover:to-fuchsia-500/50 hover:shadow-violet-500/50',
-      description: 'Everything - maximum variety',
+      description: 'Select all categories for maximum variety and endless possibilities',
       questionCount: 'All'
     },
     {
@@ -462,7 +422,7 @@ export default function CardBrowserScreen() {
       emoji: '🎲',
       categories: [], // Will be filled dynamically
       color: 'from-pink-500/40 to-rose-600/40 border-pink-400/50 hover:from-pink-400/50 hover:to-rose-500/50 hover:shadow-pink-500/50',
-      description: 'Let fate decide - random selection',
+      description: 'Let fate decide - choose how many random categories you want',
       questionCount: 'Custom',
       isRandom: true
     }
@@ -565,45 +525,43 @@ export default function CardBrowserScreen() {
         </div>
 
         {/* Quick Presets */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-purple-300 mb-3 flex items-center gap-2">
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-purple-300 mb-4 flex items-center gap-2">
             <Icon name="zap" size={20} />
-            Quick Start Presets
+            Quick Start
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {presetConfigs.map((preset) => (
               <button
                 key={preset.name}
                 onClick={() => applyPreset(preset)}
                 className={`
-                  relative group p-4 rounded-xl border-2 transition-all duration-300
+                  relative group p-6 rounded-2xl border-2 transition-all duration-300
                   bg-gradient-to-br backdrop-blur-md
-                  hover:scale-105 shadow-lg
+                  hover:scale-[1.02] shadow-xl
                   ${preset.color}
                 `}
               >
-                <div className="flex items-start gap-3">
-                  <div className="text-3xl">{preset.emoji}</div>
-                  <div className="flex-1 text-left">
-                    <div className="font-bold text-white text-lg mb-1">
-                      {preset.name}
-                    </div>
-                    <div className="text-xs text-purple-200/80 mb-2">
-                      {preset.description}
-                    </div>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="bg-black/30 px-2 py-1 rounded text-purple-300">
-                        {preset.categories.length} categories
-                      </span>
-                      <span className="bg-black/30 px-2 py-1 rounded text-purple-300">
-                        ~{preset.questionCount} questions
-                      </span>
-                    </div>
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className="text-5xl mb-2">{preset.emoji}</div>
+                  <div className="font-bold text-white text-2xl">
+                    {preset.name}
+                  </div>
+                  <div className="text-sm text-purple-100/90 leading-relaxed px-4">
+                    {preset.description}
+                  </div>
+                  <div className="flex items-center justify-center gap-3 text-sm mt-2">
+                    <span className="bg-black/40 px-3 py-1.5 rounded-full text-purple-200 font-medium">
+                      {preset.isRandom ? '🎲 Custom' : `${preset.categories.length} Categories`}
+                    </span>
+                    <span className="bg-black/40 px-3 py-1.5 rounded-full text-purple-200 font-medium">
+                      {preset.questionCount === 'All' ? '⭐ All Questions' : `${preset.questionCount} Questions`}
+                    </span>
                   </div>
                 </div>
                 
-                {/* Hover indicator */}
-                <div className="absolute inset-0 rounded-xl border-2 border-white/0 group-hover:border-white/30 transition-all duration-300 pointer-events-none" />
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-white/0 group-hover:border-white/40 transition-all duration-300 pointer-events-none" />
               </button>
             ))}
           </div>
