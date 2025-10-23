@@ -260,3 +260,78 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Unique Category Card Animations */
+
+/* Pulse Slow - Deep Thoughts */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* Bounce Subtle - Hypotheticals */
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Shake Subtle - Wild Cards */
+@keyframes shake-subtle {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-2px) rotate(-0.5deg); }
+  75% { transform: translateX(2px) rotate(0.5deg); }
+}
+
+/* Rotate Slow - Daily Routines */
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Float - Objects & Places */
+/* Already defined above */
+
+/* Fade Pulse - History & Mythology */
+@keyframes fade-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Grow - Science & Nature */
+@keyframes grow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* Sway - Arts & Literature */
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+/* Bounce Gentle - Food & Drink */
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.01); }
+}
+
+/* Drift - Travel & Geography */
+@keyframes drift {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(3px) translateY(-2px); }
+  75% { transform: translateX(-3px) translateY(2px); }
+}
+
+/* Glitch Subtle - Technology & Future */
+@keyframes glitch-subtle {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 1px); }
+}
+
+/* Heartbeat - Personality & Psyche */
+/* Already defined above */
+

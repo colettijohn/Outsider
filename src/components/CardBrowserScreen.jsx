@@ -9,18 +9,18 @@ import { constellationLayouts } from '../data/constellationLayouts'
 // Helper function to get icon for each constellation category
 const getCategoryIcon = (categoryName) => {
   const iconMap = {
-    'Fears': 'skull',
-    'Memories': 'brain',
-    'Beliefs': 'star',
-    'Desires': 'heart',
-    'Secrets': 'lock',
-    'Dreams': 'moon',
-    'Regrets': 'hourglass',
-    'Relationships': 'users',
-    'Identity': 'user',
-    'Morality': 'scales',
-    'Future': 'rocket',
-    'Past': 'clock'
+    'Deep Thoughts': 'brain',
+    'Hypotheticals': 'lightbulb',
+    'Wild Cards': 'zap',
+    'Daily Routines': 'coffee',
+    'Objects & Places': 'map-pin',
+    'History & Mythology': 'book',
+    'Science & Nature': 'leaf',
+    'Arts & Literature': 'palette',
+    'Food & Drink': 'utensils',
+    'Travel & Geography': 'globe',
+    'Technology & Future': 'rocket',
+    'Personality & Psyche': 'heart'
   }
   return iconMap[categoryName] || 'question'
 }
@@ -28,20 +28,159 @@ const getCategoryIcon = (categoryName) => {
 // Helper function to get description for each constellation
 const getCategoryDescription = (categoryName) => {
   const descMap = {
-    'Fears': 'Explore what terrifies us',
-    'Memories': 'Revisit moments that shaped us',
-    'Beliefs': 'Challenge our core convictions',
-    'Desires': 'Reveal what we truly want',
-    'Secrets': 'Uncover hidden truths',
-    'Dreams': 'Share our aspirations',
-    'Regrets': 'Confront what we wish we could change',
-    'Relationships': 'Navigate connections with others',
-    'Identity': 'Question who we really are',
-    'Morality': 'Examine our ethical boundaries',
-    'Future': 'Envision what lies ahead',
-    'Past': 'Reflect on where we came from'
+    'Deep Thoughts': 'Philosophical questions that challenge your worldview',
+    'Hypotheticals': 'Imaginative scenarios and what-if situations',
+    'Wild Cards': 'Unexpected and quirky questions for fun surprises',
+    'Daily Routines': 'Everyday habits and personal rituals',
+    'Objects & Places': 'Stories about things and locations that matter',
+    'History & Mythology': 'Tales from the past and legendary stories',
+    'Science & Nature': 'The wonders of the natural and scientific world',
+    'Arts & Literature': 'Creative expression and cultural appreciation',
+    'Food & Drink': 'Culinary experiences and taste preferences',
+    'Travel & Geography': 'Adventures and places around the world',
+    'Technology & Future': 'Innovation, progress, and what\'s to come',
+    'Personality & Psyche': 'Self-discovery and understanding human nature'
   }
   return descMap[categoryName] || 'A collection of thought-provoking questions'
+}
+
+// Unique theme configuration for each category
+const getCategoryTheme = (categoryName) => {
+  const themes = {
+    'Deep Thoughts': {
+      gradients: 'from-indigo-600/30 via-purple-600/20 to-violet-700/30',
+      borderColor: 'border-indigo-400/40',
+      hoverGradients: 'hover:from-indigo-500/40 hover:via-purple-500/30 hover:to-violet-600/40',
+      shadowColor: 'shadow-indigo-500/30 hover:shadow-indigo-400/50',
+      selectedGlow: 'shadow-indigo-400/60',
+      hexGradient: ['#4f46e5', '#7c3aed'],
+      accentColor: '#818cf8',
+      pattern: 'brain-waves',
+      animation: 'pulse-slow'
+    },
+    'Hypotheticals': {
+      gradients: 'from-yellow-600/30 via-amber-500/20 to-orange-600/30',
+      borderColor: 'border-yellow-400/40',
+      hoverGradients: 'hover:from-yellow-500/40 hover:via-amber-400/30 hover:to-orange-500/40',
+      shadowColor: 'shadow-yellow-500/30 hover:shadow-yellow-400/50',
+      selectedGlow: 'shadow-yellow-400/60',
+      hexGradient: ['#f59e0b', '#f97316'],
+      accentColor: '#fbbf24',
+      pattern: 'question-marks',
+      animation: 'bounce-subtle'
+    },
+    'Wild Cards': {
+      gradients: 'from-fuchsia-600/30 via-pink-600/20 to-rose-600/30',
+      borderColor: 'border-fuchsia-400/40',
+      hoverGradients: 'hover:from-fuchsia-500/40 hover:via-pink-500/30 hover:to-rose-500/40',
+      shadowColor: 'shadow-fuchsia-500/30 hover:shadow-fuchsia-400/50',
+      selectedGlow: 'shadow-fuchsia-400/60',
+      hexGradient: ['#c026d3', '#e11d48'],
+      accentColor: '#f0abfc',
+      pattern: 'lightning',
+      animation: 'shake-subtle'
+    },
+    'Daily Routines': {
+      gradients: 'from-blue-600/30 via-sky-500/20 to-cyan-600/30',
+      borderColor: 'border-blue-400/40',
+      hoverGradients: 'hover:from-blue-500/40 hover:via-sky-400/30 hover:to-cyan-500/40',
+      shadowColor: 'shadow-blue-500/30 hover:shadow-blue-400/50',
+      selectedGlow: 'shadow-blue-400/60',
+      hexGradient: ['#2563eb', '#06b6d4'],
+      accentColor: '#60a5fa',
+      pattern: 'circles',
+      animation: 'rotate-slow'
+    },
+    'Objects & Places': {
+      gradients: 'from-slate-600/30 via-gray-500/20 to-zinc-600/30',
+      borderColor: 'border-slate-400/40',
+      hoverGradients: 'hover:from-slate-500/40 hover:via-gray-400/30 hover:to-zinc-500/40',
+      shadowColor: 'shadow-slate-500/30 hover:shadow-slate-400/50',
+      selectedGlow: 'shadow-slate-400/60',
+      hexGradient: ['#64748b', '#71717a'],
+      accentColor: '#94a3b8',
+      pattern: 'grid',
+      animation: 'float'
+    },
+    'History & Mythology': {
+      gradients: 'from-amber-700/30 via-yellow-700/20 to-orange-800/30',
+      borderColor: 'border-amber-500/40',
+      hoverGradients: 'hover:from-amber-600/40 hover:via-yellow-600/30 hover:to-orange-700/40',
+      shadowColor: 'shadow-amber-600/30 hover:shadow-amber-500/50',
+      selectedGlow: 'shadow-amber-500/60',
+      hexGradient: ['#b45309', '#d97706'],
+      accentColor: '#fbbf24',
+      pattern: 'scroll',
+      animation: 'fade-pulse'
+    },
+    'Science & Nature': {
+      gradients: 'from-emerald-600/30 via-green-600/20 to-teal-700/30',
+      borderColor: 'border-emerald-400/40',
+      hoverGradients: 'hover:from-emerald-500/40 hover:via-green-500/30 hover:to-teal-600/40',
+      shadowColor: 'shadow-emerald-500/30 hover:shadow-emerald-400/50',
+      selectedGlow: 'shadow-emerald-400/60',
+      hexGradient: ['#059669', '#0d9488'],
+      accentColor: '#34d399',
+      pattern: 'organic',
+      animation: 'grow'
+    },
+    'Arts & Literature': {
+      gradients: 'from-purple-600/30 via-fuchsia-500/20 to-pink-600/30',
+      borderColor: 'border-purple-400/40',
+      hoverGradients: 'hover:from-purple-500/40 hover:via-fuchsia-400/30 hover:to-pink-500/40',
+      shadowColor: 'shadow-purple-500/30 hover:shadow-purple-400/50',
+      selectedGlow: 'shadow-purple-400/60',
+      hexGradient: ['#9333ea', '#d946ef'],
+      accentColor: '#c084fc',
+      pattern: 'brush-strokes',
+      animation: 'sway'
+    },
+    'Food & Drink': {
+      gradients: 'from-red-600/30 via-rose-500/20 to-pink-600/30',
+      borderColor: 'border-red-400/40',
+      hoverGradients: 'hover:from-red-500/40 hover:via-rose-400/30 hover:to-pink-500/40',
+      shadowColor: 'shadow-red-500/30 hover:shadow-red-400/50',
+      selectedGlow: 'shadow-red-400/60',
+      hexGradient: ['#dc2626', '#f43f5e'],
+      accentColor: '#fb7185',
+      pattern: 'food-dots',
+      animation: 'bounce-gentle'
+    },
+    'Travel & Geography': {
+      gradients: 'from-cyan-600/30 via-blue-500/20 to-indigo-600/30',
+      borderColor: 'border-cyan-400/40',
+      hoverGradients: 'hover:from-cyan-500/40 hover:via-blue-400/30 hover:to-indigo-500/40',
+      shadowColor: 'shadow-cyan-500/30 hover:shadow-cyan-400/50',
+      selectedGlow: 'shadow-cyan-400/60',
+      hexGradient: ['#0891b2', '#3b82f6'],
+      accentColor: '#22d3ee',
+      pattern: 'waves',
+      animation: 'drift'
+    },
+    'Technology & Future': {
+      gradients: 'from-violet-600/30 via-purple-500/20 to-fuchsia-600/30',
+      borderColor: 'border-violet-400/40',
+      hoverGradients: 'hover:from-violet-500/40 hover:via-purple-400/30 hover:to-fuchsia-500/40',
+      shadowColor: 'shadow-violet-500/30 hover:shadow-violet-400/50',
+      selectedGlow: 'shadow-violet-400/60',
+      hexGradient: ['#7c3aed', '#c026d3'],
+      accentColor: '#a78bfa',
+      pattern: 'circuit',
+      animation: 'glitch-subtle'
+    },
+    'Personality & Psyche': {
+      gradients: 'from-rose-600/30 via-pink-500/20 to-fuchsia-600/30',
+      borderColor: 'border-rose-400/40',
+      hoverGradients: 'hover:from-rose-500/40 hover:via-pink-400/30 hover:to-fuchsia-500/40',
+      shadowColor: 'shadow-rose-500/30 hover:shadow-rose-400/50',
+      selectedGlow: 'shadow-rose-400/60',
+      hexGradient: ['#e11d48', '#ec4899'],
+      accentColor: '#fb7185',
+      pattern: 'hearts',
+      animation: 'heartbeat'
+    }
+  }
+  return themes[categoryName] || themes['Deep Thoughts']
 }
 
 // Constellation mini component
@@ -512,6 +651,7 @@ export default function CardBrowserScreen() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {constellations.map(constellation => {
             const isSelected = selectedConstellations.has(constellation.name)
+            const theme = getCategoryTheme(constellation.name)
             
             return (
               <div
@@ -521,11 +661,14 @@ export default function CardBrowserScreen() {
                   rounded-2xl border-2 p-6 transition-all duration-300 transform
                   backdrop-blur-md overflow-hidden
                   ${isSelected
-                    ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 scale-105 shadow-2xl shadow-purple-500/50 animate-pulse'
-                    : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/30'
+                    ? `bg-gradient-to-br ${theme.gradients} ${theme.borderColor} scale-105 shadow-2xl ${theme.selectedGlow}`
+                    : `bg-black/30 ${theme.borderColor} hover:border-opacity-80 ${theme.hoverGradients} hover:scale-105 hover:shadow-xl ${theme.shadowColor}`
                   }
                 `}
                 onClick={() => toggleConstellation(constellation.name)}
+                style={{
+                  animation: isSelected ? `${theme.animation} 3s ease-in-out infinite` : 'none'
+                }}
               >
                 {/* Constellation Background */}
                 <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -534,7 +677,13 @@ export default function CardBrowserScreen() {
 
                 {/* Selection Indicator */}
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50 animate-bounce z-10">
+                  <div 
+                    className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-lg animate-bounce z-10"
+                    style={{
+                      background: `linear-gradient(135deg, ${theme.hexGradient[0]}, ${theme.hexGradient[1]})`,
+                      boxShadow: `0 4px 20px ${theme.accentColor}80`
+                    }}
+                  >
                     <Icon name="check" size={20} />
                   </div>
                 )}
@@ -547,9 +696,9 @@ export default function CardBrowserScreen() {
                       {/* Outer hexagon with glow */}
                       <defs>
                         <linearGradient id={`hex-gradient-${constellation.name}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor={isSelected ? "#a78bfa" : "#581c87"} stopOpacity="0.8" />
-                          <stop offset="50%" stopColor={isSelected ? "#c084fc" : "#7c3aed"} stopOpacity="1" />
-                          <stop offset="100%" stopColor={isSelected ? "#e879f9" : "#6b21a8"} stopOpacity="0.8" />
+                          <stop offset="0%" stopColor={theme.hexGradient[0]} stopOpacity="0.8" />
+                          <stop offset="50%" stopColor={theme.accentColor} stopOpacity="1" />
+                          <stop offset="100%" stopColor={theme.hexGradient[1]} stopOpacity="0.8" />
                         </linearGradient>
                         <filter id={`hex-glow-${constellation.name}`}>
                           <feGaussianBlur stdDeviation={isSelected ? "3" : "1.5"} result="coloredBlur"/>
@@ -565,13 +714,13 @@ export default function CardBrowserScreen() {
                         points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
                         fill="none"
                         stroke={`url(#hex-gradient-${constellation.name})`}
-                        strokeWidth={isSelected ? "2" : "1.5"}
+                        strokeWidth={isSelected ? "2.5" : "1.5"}
                         className="transition-all duration-500"
                         style={{
                           filter: `url(#hex-glow-${constellation.name})`,
                           animation: isSelected ? 'rotate-hex 8s linear infinite' : 'none',
                           transformOrigin: 'center',
-                          opacity: isSelected ? 0.8 : 0.5
+                          opacity: isSelected ? 0.9 : 0.5
                         }}
                       />
                       
@@ -580,12 +729,12 @@ export default function CardBrowserScreen() {
                         points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5"
                         fill={isSelected 
                           ? 'url(#hex-gradient-' + constellation.name + ')' 
-                          : 'rgba(88, 28, 135, 0.3)'}
-                        stroke={isSelected ? "#c084fc" : "#7c3aed"}
+                          : `${theme.hexGradient[0]}33`}
+                        stroke={isSelected ? theme.accentColor : theme.hexGradient[0]}
                         strokeWidth="1"
                         className="transition-all duration-500"
                         style={{
-                          filter: isSelected ? 'drop-shadow(0 0 8px rgba(192,132,252,0.6))' : 'none'
+                          filter: isSelected ? `drop-shadow(0 0 10px ${theme.accentColor})` : 'none'
                         }}
                       />
                       
@@ -603,10 +752,10 @@ export default function CardBrowserScreen() {
                           cx={point.x}
                           cy={point.y}
                           r={isSelected ? "2.5" : "1.5"}
-                          fill={isSelected ? "#e0b3ff" : "#a78bfa"}
+                          fill={isSelected ? theme.accentColor : theme.hexGradient[0]}
                           className="transition-all duration-500"
                           style={{
-                            filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'none',
+                            filter: isSelected ? `drop-shadow(0 0 4px ${theme.accentColor})` : 'none',
                             animation: isSelected ? `twinkle 2s ease-in-out infinite ${idx * 0.2}s` : 'none'
                           }}
                         />
@@ -629,17 +778,34 @@ export default function CardBrowserScreen() {
                 `}</style>
 
                 {/* Name */}
-                <h3 className="text-xl sm:text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent relative z-10">
+                <h3 
+                  className="text-xl sm:text-2xl font-bold text-center mb-2 bg-clip-text text-transparent relative z-10"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${theme.hexGradient[0]}, ${theme.accentColor}, ${theme.hexGradient[1]})`,
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text'
+                  }}
+                >
                   {constellation.name}
                 </h3>
 
                 {/* Description */}
-                <p className="text-xs sm:text-sm text-purple-300/80 text-center mb-4 min-h-[2.5rem] relative z-10">
+                <p 
+                  className="text-xs sm:text-sm text-center mb-4 min-h-[2.5rem] relative z-10"
+                  style={{ color: `${theme.accentColor}cc` }}
+                >
                   {constellation.description}
                 </p>
 
-                {/* Question Count */}
-                <div className="flex items-center justify-center gap-2 text-purple-400 mb-3 relative z-10">
+                {/* Question Count Badge */}
+                <div 
+                  className="flex items-center justify-center gap-2 mb-3 relative z-10 px-3 py-1.5 rounded-full mx-auto w-fit border"
+                  style={{
+                    backgroundColor: `${theme.hexGradient[0]}20`,
+                    borderColor: `${theme.accentColor}40`,
+                    color: theme.accentColor
+                  }}
+                >
                   <Icon name="list" size={16} />
                   <span className="font-semibold text-sm">{constellation.count} questions</span>
                 </div>
@@ -650,7 +816,22 @@ export default function CardBrowserScreen() {
                     e.stopPropagation()
                     setPreviewConstellation(constellation)
                   }}
-                  className="w-full py-2 bg-black/30 backdrop-blur-sm border border-purple-600/50 rounded-lg hover:bg-purple-800/50 hover:border-purple-400 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-purple-500/30 relative z-10"
+                  className="w-full py-2 backdrop-blur-sm border rounded-lg transition-all duration-300 text-sm font-medium shadow-lg relative z-10"
+                  style={{
+                    backgroundColor: `${theme.hexGradient[0]}20`,
+                    borderColor: `${theme.accentColor}40`,
+                    color: theme.accentColor
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = `${theme.hexGradient[0]}40`
+                    e.currentTarget.style.borderColor = theme.accentColor
+                    e.currentTarget.style.boxShadow = `0 4px 20px ${theme.accentColor}50`
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = `${theme.hexGradient[0]}20`
+                    e.currentTarget.style.borderColor = `${theme.accentColor}40`
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'
+                  }}
                 >
                   Preview Questions
                 </button>
