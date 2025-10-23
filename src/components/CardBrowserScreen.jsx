@@ -89,7 +89,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#2563eb', '#06b6d4'],
       accentColor: '#60a5fa',
       pattern: 'circles',
-      animation: 'rotate-slow'
+      animation: 'pulse-slow'
     },
     'Objects & Places': {
       gradients: 'from-slate-600/30 via-gray-500/20 to-zinc-600/30',
