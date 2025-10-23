@@ -100,7 +100,6 @@ const AdminPanelModal = ({
   const screens = [
     'home', 
     'customizeGame', 
-    'cardBrowser', 
     'lobby', 
     'game', 
     'debate', 
@@ -115,7 +114,6 @@ const AdminPanelModal = ({
     const names = {
       'home': 'Home',
       'customizeGame': '🎴 Customize Game',
-      'cardBrowser': '📚 Card Browser',
       'lobby': 'Lobby',
       'game': 'Game',
       'debate': 'Debate',
