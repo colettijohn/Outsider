@@ -1079,65 +1079,98 @@ export default function CardBrowserScreen() {
                   Phase Timers
                 </h3>
                 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {/* Answer Timer */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm font-semibold text-purple-300">Answer Phase</label>
-                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.answer}s</span>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+                        <span className="text-xl">✍️</span>
+                        Answer Phase
+                      </label>
+                      <div className="bg-cyan-500/20 border border-cyan-400/50 rounded-lg px-3 py-1">
+                        <span className="text-xl font-bold text-cyan-300">{gameSettings.customTimers.answer}s</span>
+                      </div>
                     </div>
-                    <input
-                      type="range"
-                      min="30"
-                      max="180"
-                      step="15"
-                      value={gameSettings.customTimers.answer}
-                      onChange={(e) => setGameSettings(prev => ({
-                        ...prev,
-                        customTimers: { ...prev.customTimers, answer: parseInt(e.target.value) }
-                      }))}
-                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                    />
+                    <div className="grid grid-cols-5 gap-2">
+                      {[30, 45, 60, 90, 120].map(seconds => (
+                        <button
+                          key={seconds}
+                          onClick={() => setGameSettings(prev => ({
+                            ...prev,
+                            customTimers: { ...prev.customTimers, answer: seconds }
+                          }))}
+                          className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                            gameSettings.customTimers.answer === seconds
+                              ? 'bg-gradient-to-br from-cyan-500/60 to-blue-500/60 border-2 border-cyan-300 text-white shadow-lg shadow-cyan-500/50 scale-105'
+                              : 'bg-black/40 border border-cyan-700/30 text-cyan-400/70 hover:bg-cyan-900/40 hover:border-cyan-500/50 hover:text-cyan-300'
+                          }`}
+                        >
+                          {seconds}s
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Debate Timer */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm font-semibold text-purple-300">Debate Phase</label>
-                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.debate}s</span>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+                        <span className="text-xl">💬</span>
+                        Debate Phase
+                      </label>
+                      <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-lg px-3 py-1">
+                        <span className="text-xl font-bold text-emerald-300">{gameSettings.customTimers.debate}s</span>
+                      </div>
                     </div>
-                    <input
-                      type="range"
-                      min="30"
-                      max="180"
-                      step="15"
-                      value={gameSettings.customTimers.debate}
-                      onChange={(e) => setGameSettings(prev => ({
-                        ...prev,
-                        customTimers: { ...prev.customTimers, debate: parseInt(e.target.value) }
-                      }))}
-                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                    />
+                    <div className="grid grid-cols-5 gap-2">
+                      {[30, 45, 60, 90, 120].map(seconds => (
+                        <button
+                          key={seconds}
+                          onClick={() => setGameSettings(prev => ({
+                            ...prev,
+                            customTimers: { ...prev.customTimers, debate: seconds }
+                          }))}
+                          className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                            gameSettings.customTimers.debate === seconds
+                              ? 'bg-gradient-to-br from-emerald-500/60 to-green-500/60 border-2 border-emerald-300 text-white shadow-lg shadow-emerald-500/50 scale-105'
+                              : 'bg-black/40 border border-emerald-700/30 text-emerald-400/70 hover:bg-emerald-900/40 hover:border-emerald-500/50 hover:text-emerald-300'
+                          }`}
+                        >
+                          {seconds}s
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Vote Timer */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm font-semibold text-purple-300">Voting Phase</label>
-                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.vote}s</span>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+                        <span className="text-xl">🗳️</span>
+                        Voting Phase
+                      </label>
+                      <div className="bg-rose-500/20 border border-rose-400/50 rounded-lg px-3 py-1">
+                        <span className="text-xl font-bold text-rose-300">{gameSettings.customTimers.vote}s</span>
+                      </div>
                     </div>
-                    <input
-                      type="range"
-                      min="20"
-                      max="120"
-                      step="15"
-                      value={gameSettings.customTimers.vote}
-                      onChange={(e) => setGameSettings(prev => ({
-                        ...prev,
-                        customTimers: { ...prev.customTimers, vote: parseInt(e.target.value) }
-                      }))}
-                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                    />
+                    <div className="grid grid-cols-5 gap-2">
+                      {[20, 30, 45, 60, 90].map(seconds => (
+                        <button
+                          key={seconds}
+                          onClick={() => setGameSettings(prev => ({
+                            ...prev,
+                            customTimers: { ...prev.customTimers, vote: seconds }
+                          }))}
+                          className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                            gameSettings.customTimers.vote === seconds
+                              ? 'bg-gradient-to-br from-rose-500/60 to-pink-500/60 border-2 border-rose-300 text-white shadow-lg shadow-rose-500/50 scale-105'
+                              : 'bg-black/40 border border-rose-700/30 text-rose-400/70 hover:bg-rose-900/40 hover:border-rose-500/50 hover:text-rose-300'
+                          }`}
+                        >
+                          {seconds}s
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
