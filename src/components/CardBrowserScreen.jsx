@@ -49,47 +49,55 @@ const ConstellationMini = ({ categoryName, isSelected }) => {
   const layout = constellationLayouts[categoryName] || constellationLayouts['Default']
   
   return (
-    <svg 
-      viewBox="0 0 100 100" 
-      className="w-full h-full"
-      style={{ filter: isSelected ? 'drop-shadow(0 0 8px rgba(168,85,247,0.8))' : 'none' }}
-    >
-      {/* Connecting lines */}
-      {layout.lines.map((line, idx) => {
-        const start = layout.stars[line[0]]
-        const end = layout.stars[line[1]]
-        return (
-          <line
+    <>
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
+        }
+      `}</style>
+      <svg 
+        viewBox="0 0 100 100" 
+        className="w-full h-full"
+        style={{ filter: isSelected ? 'drop-shadow(0 0 8px rgba(168,85,247,0.8))' : 'none' }}
+      >
+        {/* Connecting lines */}
+        {layout.lines.map((line, idx) => {
+          const start = layout.stars[line[0]]
+          const end = layout.stars[line[1]]
+          return (
+            <line
+              key={idx}
+              x1={start.x}
+              y1={start.y}
+              x2={end.x}
+              y2={end.y}
+              stroke={isSelected ? '#c084fc' : '#7c3aed'}
+              strokeWidth="0.5"
+              className="transition-all duration-300"
+              opacity={isSelected ? 0.9 : 0.5}
+            />
+          )
+        })}
+        
+        {/* Stars */}
+        {layout.stars.map((star, idx) => (
+          <circle
             key={idx}
-            x1={start.x}
-            y1={start.y}
-            x2={end.x}
-            y2={end.y}
-            stroke={isSelected ? '#c084fc' : '#7c3aed'}
-            strokeWidth="0.5"
+            cx={star.x}
+            cy={star.y}
+            r={idx === 0 ? 2.5 : 1.5}
+            fill={isSelected ? '#e0b3ff' : '#a78bfa'}
             className="transition-all duration-300"
-            opacity={isSelected ? 0.9 : 0.5}
+            style={{
+              filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'drop-shadow(0 0 2px rgba(167,139,250,0.6))',
+              animation: isSelected ? 'twinkle 2s ease-in-out infinite' : 'none',
+              animationDelay: `${idx * 0.2}s`
+            }}
           />
-        )
-      })}
-      
-      {/* Stars */}
-      {layout.stars.map((star, idx) => (
-        <circle
-          key={idx}
-          cx={star.x}
-          cy={star.y}
-          r={idx === 0 ? 2.5 : 1.5}
-          fill={isSelected ? '#e0b3ff' : '#a78bfa'}
-          className="transition-all duration-300"
-          style={{
-            filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'drop-shadow(0 0 2px rgba(167,139,250,0.6))',
-            animation: isSelected ? 'twinkle 2s ease-in-out infinite' : 'none',
-            animationDelay: `${idx * 0.2}s`
-          }}
-        />
-      ))}
-    </svg>
+        ))}
+      </svg>
+    </>
   )
 }
 
