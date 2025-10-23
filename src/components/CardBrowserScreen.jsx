@@ -56,7 +56,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#4f46e5', '#7c3aed'],
       accentColor: '#818cf8',
       pattern: 'brain-waves',
-      animation: 'pulse-slow'
+      animation: 'bounce-subtle'
     },
     'Hypotheticals': {
       gradients: 'from-yellow-600/30 via-amber-500/20 to-orange-600/30',
@@ -78,7 +78,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#c026d3', '#e11d48'],
       accentColor: '#f0abfc',
       pattern: 'lightning',
-      animation: 'shake-subtle'
+      animation: 'bounce-subtle'
     },
     'Daily Routines': {
       gradients: 'from-blue-600/30 via-sky-500/20 to-cyan-600/30',
@@ -89,7 +89,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#2563eb', '#06b6d4'],
       accentColor: '#60a5fa',
       pattern: 'circles',
-      animation: 'pulse-slow'
+      animation: 'bounce-subtle'
     },
     'Objects & Places': {
       gradients: 'from-slate-600/30 via-gray-500/20 to-zinc-600/30',
@@ -100,7 +100,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#64748b', '#71717a'],
       accentColor: '#94a3b8',
       pattern: 'grid',
-      animation: 'float'
+      animation: 'bounce-subtle'
     },
     'History & Mythology': {
       gradients: 'from-amber-700/30 via-yellow-700/20 to-orange-800/30',
@@ -111,7 +111,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#b45309', '#d97706'],
       accentColor: '#fbbf24',
       pattern: 'scroll',
-      animation: 'fade-pulse'
+      animation: 'bounce-subtle'
     },
     'Science & Nature': {
       gradients: 'from-emerald-600/30 via-green-600/20 to-teal-700/30',
@@ -122,7 +122,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#059669', '#0d9488'],
       accentColor: '#34d399',
       pattern: 'organic',
-      animation: 'grow'
+      animation: 'bounce-subtle'
     },
     'Arts & Literature': {
       gradients: 'from-purple-600/30 via-fuchsia-500/20 to-pink-600/30',
@@ -133,7 +133,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#9333ea', '#d946ef'],
       accentColor: '#c084fc',
       pattern: 'brush-strokes',
-      animation: 'sway'
+      animation: 'bounce-subtle'
     },
     'Food & Drink': {
       gradients: 'from-red-600/30 via-rose-500/20 to-pink-600/30',
@@ -144,7 +144,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#dc2626', '#f43f5e'],
       accentColor: '#fb7185',
       pattern: 'food-dots',
-      animation: 'bounce-gentle'
+      animation: 'bounce-subtle'
     },
     'Travel & Geography': {
       gradients: 'from-cyan-600/30 via-blue-500/20 to-indigo-600/30',
@@ -155,7 +155,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#0891b2', '#3b82f6'],
       accentColor: '#22d3ee',
       pattern: 'waves',
-      animation: 'drift'
+      animation: 'bounce-subtle'
     },
     'Technology & Future': {
       gradients: 'from-violet-600/30 via-purple-500/20 to-fuchsia-600/30',
@@ -166,7 +166,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#7c3aed', '#c026d3'],
       accentColor: '#a78bfa',
       pattern: 'circuit',
-      animation: 'glitch-subtle'
+      animation: 'bounce-subtle'
     },
     'Personality & Psyche': {
       gradients: 'from-rose-600/30 via-pink-500/20 to-fuchsia-600/30',
@@ -177,7 +177,7 @@ const getCategoryTheme = (categoryName) => {
       hexGradient: ['#e11d48', '#ec4899'],
       accentColor: '#fb7185',
       pattern: 'hearts',
-      animation: 'heartbeat'
+      animation: 'bounce-subtle'
     }
   }
   return themes[categoryName] || themes['Deep Thoughts']
