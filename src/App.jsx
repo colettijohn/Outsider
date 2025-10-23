@@ -161,7 +161,6 @@ function App() {
   const screens = {
     home: <HomeScreen onTriggerScribbler={onTriggerScribbler} onTriggerKonami={handleTriggerKonami} isKonamiArmed={isKonamiArmed} />,
     customizeGame: <CardBrowserScreen />,
-    quickRitual: <QuickRitualScreen />,
     cardBrowser: <CardBrowserScreen />,
     lobby: <LobbyScreen />,
     game: <GameScreen />,

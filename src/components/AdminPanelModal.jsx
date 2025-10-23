@@ -99,7 +99,6 @@ const AdminPanelModal = ({
 
   const screens = [
     'home', 
-    'quickRitual', 
     'customizeGame', 
     'cardBrowser', 
     'lobby', 
@@ -115,8 +114,7 @@ const AdminPanelModal = ({
   const formatScreenName = (screen) => {
     const names = {
       'home': 'Home',
-      'quickRitual': '⚡ Quick Ritual',
-      'customizeGame': '🎴 Full Customize',
+      'customizeGame': '🎴 Customize Game',
       'cardBrowser': '📚 Card Browser',
       'lobby': 'Lobby',
       'game': 'Game',

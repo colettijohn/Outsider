@@ -70,11 +70,11 @@ const HomeScreen = ({ onTriggerScribbler, onTriggerKonami, isKonamiArmed }) => {
     setShowRecent(false)
   }
 
-  // Navigate to Quick Ritual or create room directly
+  // Navigate to Customize Game or create room directly
   const handleStartNewSession = () => {
     if (isFeatureEnabled('NEW_CUSTOMIZE_SCREEN')) {
-      // Navigate to Quick Ritual (it will create the room)
-      setGameState({ ...gameState, screen: 'quickRitual' })
+      // Navigate to Customize Game (Card Browser)
+      setGameState({ ...gameState, screen: 'customizeGame' })
     } else {
       // Old flow: create room and go to lobby
       handleCreateRoom({ preventDefault: () => {} })

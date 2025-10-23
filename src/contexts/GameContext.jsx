@@ -176,8 +176,6 @@ export const GameProvider = ({ children }) => {
         return { screen: 'home' }
       case 'customizeGame': 
         return { ...baseState, screen: 'customizeGame', players: [basePlayers[0]] }
-      case 'quickRitual':
-        return { ...baseState, screen: 'quickRitual', players: [basePlayers[0]] }
       case 'cardBrowser':
         return { ...baseState, screen: 'cardBrowser', players: [basePlayers[0]] }
       case 'lobby': 
