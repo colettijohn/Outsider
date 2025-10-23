@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🌌 Outsider: Cosmic Council
 
 A cosmic-themed social deduction game built with React. Find The Anomaly among the Entities through philosophical questions and clever deduction!
@@ -6,6 +5,8 @@ A cosmic-themed social deduction game built with React. Find The Anomaly among t
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![React](https://img.shields.io/badge/react-18.2.0-61dafb.svg)
 ![Vite](https://img.shields.io/badge/vite-5.0-646cff.svg)
+
+> 📚 **[View Full Documentation](./docs/)** - Detailed guides, deployment instructions, and feature documentation
 
 ---
 
@@ -211,6 +212,3 @@ MIT License
 ---
 
 **Built with ❤️ and ✨ cosmic energy**
-=======
-# Outsider
->>>>>>> 305d6da93a94ea4196e7c3563f82b21b81d5dac9
