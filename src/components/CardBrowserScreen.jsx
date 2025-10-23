@@ -233,6 +233,8 @@ export default function CardBrowserScreen() {
   const [selectedConstellations, setSelectedConstellations] = useState(new Set())
   const [previewConstellation, setPreviewConstellation] = useState(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [showRandomModal, setShowRandomModal] = useState(false)
+  const [randomCount, setRandomCount] = useState(5)
 
   // Track mouse for parallax effect
   const handleMouseMove = (e) => {
@@ -315,11 +317,37 @@ export default function CardBrowserScreen() {
       color: 'from-violet-600/40 to-fuchsia-600/40 border-violet-400/50 hover:from-violet-500/50 hover:to-fuchsia-500/50 hover:shadow-violet-500/50',
       description: 'Everything - maximum variety',
       questionCount: 'All'
+    },
+    {
+      name: 'Random Mix',
+      emoji: '🎲',
+      categories: [], // Will be filled dynamically
+      color: 'from-pink-500/40 to-rose-600/40 border-pink-400/50 hover:from-pink-400/50 hover:to-rose-500/50 hover:shadow-pink-500/50',
+      description: 'Let fate decide - random selection',
+      questionCount: 'Custom',
+      isRandom: true
     }
   ]
 
   const applyPreset = (preset) => {
-    setSelectedConstellations(new Set(preset.categories))
+    if (preset.isRandom) {
+      setShowRandomModal(true)
+    } else {
+      setSelectedConstellations(new Set(preset.categories))
+    }
+  }
+
+  // Apply random selection
+  const applyRandomSelection = () => {
+    const allCategories = Object.keys(questionData).filter(cat => questionData[cat].length > 0)
+    const count = Math.min(randomCount, allCategories.length)
+    
+    // Shuffle and select
+    const shuffled = [...allCategories].sort(() => Math.random() - 0.5)
+    const selected = shuffled.slice(0, count)
+    
+    setSelectedConstellations(new Set(selected))
+    setShowRandomModal(false)
   }
 
   // Gather all questions from selected constellations
@@ -715,6 +743,81 @@ export default function CardBrowserScreen() {
                 className="px-6 py-3 bg-black/40 backdrop-blur-sm border border-purple-500/50 rounded-xl hover:bg-purple-900/50 hover:border-purple-400 transition-all duration-300"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Random Selection Modal */}
+      {showRandomModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-purple-900/95 to-black/95 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/30 max-w-md w-full p-6 sm:p-8">
+            {/* Header */}
+            <div className="mb-6 text-center">
+              <div className="text-6xl mb-3">🎲</div>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Random Mix
+              </h2>
+              <p className="text-purple-300/80 text-sm">
+                Let fate decide your constellations
+              </p>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-6">
+              <div className="bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-4">
+                <label className="block text-sm font-semibold text-purple-300 mb-3">
+                  How many categories to select?
+                </label>
+                
+                {/* Slider */}
+                <div className="space-y-3">
+                  <input
+                    type="range"
+                    min="1"
+                    max={Object.keys(questionData).length}
+                    value={randomCount}
+                    onChange={(e) => setRandomCount(parseInt(e.target.value))}
+                    className="w-full h-2 bg-purple-900/50 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                    style={{
+                      background: `linear-gradient(to right, rgb(168 85 247) 0%, rgb(168 85 247) ${(randomCount / Object.keys(questionData).length) * 100}%, rgb(88 28 135 / 0.5) ${(randomCount / Object.keys(questionData).length) * 100}%, rgb(88 28 135 / 0.5) 100%)`
+                    }}
+                  />
+                  
+                  {/* Number Display */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-purple-400/60">1 category</span>
+                    <div className="bg-purple-500/20 border border-purple-400/50 rounded-lg px-4 py-2">
+                      <span className="text-3xl font-bold text-purple-300">{randomCount}</span>
+                    </div>
+                    <span className="text-xs text-purple-400/60">{Object.keys(questionData).length} categories</span>
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="mt-4 text-center text-xs text-purple-300/60">
+                  {randomCount === Object.keys(questionData).length 
+                    ? '✨ Selecting all categories'
+                    : `🎲 Will randomly select ${randomCount} out of ${Object.keys(questionData).length} categories`
+                  }
+                </div>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowRandomModal(false)}
+                className="flex-1 px-6 py-3 bg-black/40 backdrop-blur-sm border border-purple-500/50 rounded-xl hover:bg-purple-900/50 hover:border-purple-400 transition-all duration-300 font-semibold"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={applyRandomSelection}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-pink-500/50 font-bold"
+              >
+                🎲 Randomize
               </button>
             </div>
           </div>
