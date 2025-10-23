@@ -1020,12 +1020,13 @@ export default function CardBrowserScreen() {
                   Victory Condition
                 </h3>
                 
-                <div className="grid grid-cols-2 gap-3 mb-4">
+                {/* Win Condition Type */}
+                <div className="grid grid-cols-2 gap-3 mb-5">
                   <button
-                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'score' }))}
+                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'score', winValue: 5 }))}
                     className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                       gameSettings.winCondition === 'score'
-                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50'
+                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50 scale-105'
                         : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30'
                     }`}
                   >
@@ -1035,10 +1036,10 @@ export default function CardBrowserScreen() {
                   </button>
                   
                   <button
-                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'rounds' }))}
+                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'rounds', winValue: 3 }))}
                     className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                       gameSettings.winCondition === 'rounds'
-                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50'
+                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50 scale-105'
                         : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30'
                     }`}
                   >
@@ -1048,27 +1049,51 @@ export default function CardBrowserScreen() {
                   </button>
                 </div>
 
-                {/* Win Value Slider */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-purple-300">
-                    {gameSettings.winCondition === 'score' ? 'Points to Win' : 'Number of Rounds'}
-                  </label>
-                  <input
-                    type="range"
-                    min={gameSettings.winCondition === 'score' ? 3 : 1}
-                    max={gameSettings.winCondition === 'score' ? 15 : 10}
-                    value={gameSettings.winValue}
-                    onChange={(e) => setGameSettings(prev => ({ ...prev, winValue: parseInt(e.target.value) }))}
-                    className="w-full h-2 bg-purple-900/50 rounded-lg appearance-none cursor-pointer accent-purple-500"
-                    style={{
-                      background: `linear-gradient(to right, rgb(168 85 247) 0%, rgb(168 85 247) ${((gameSettings.winValue - (gameSettings.winCondition === 'score' ? 3 : 1)) / (gameSettings.winCondition === 'score' ? 12 : 9)) * 100}%, rgb(88 28 135 / 0.5) ${((gameSettings.winValue - (gameSettings.winCondition === 'score' ? 3 : 1)) / (gameSettings.winCondition === 'score' ? 12 : 9)) * 100}%, rgb(88 28 135 / 0.5) 100%)`
-                    }}
-                  />
-                  <div className="flex justify-center">
-                    <div className="bg-purple-500/20 border border-purple-400/50 rounded-lg px-6 py-2">
-                      <span className="text-4xl font-bold text-purple-300">{gameSettings.winValue}</span>
+                {/* Win Value Selection */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+                      <span className="text-xl">{gameSettings.winCondition === 'score' ? '🎯' : '🔢'}</span>
+                      {gameSettings.winCondition === 'score' ? 'Points to Win' : 'Number of Rounds'}
+                    </label>
+                    <div className="bg-purple-500/20 border border-purple-400/50 rounded-lg px-3 py-1">
+                      <span className="text-xl font-bold text-purple-300">{gameSettings.winValue}</span>
                     </div>
                   </div>
+                  
+                  {gameSettings.winCondition === 'score' ? (
+                    <div className="grid grid-cols-5 gap-2">
+                      {[3, 5, 7, 10, 15].map(points => (
+                        <button
+                          key={points}
+                          onClick={() => setGameSettings(prev => ({ ...prev, winValue: points }))}
+                          className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                            gameSettings.winValue === points
+                              ? 'bg-gradient-to-br from-purple-500/60 to-pink-500/60 border-2 border-purple-300 text-white shadow-lg shadow-purple-500/50 scale-105'
+                              : 'bg-black/40 border border-purple-700/30 text-purple-400/70 hover:bg-purple-900/40 hover:border-purple-500/50 hover:text-purple-300'
+                          }`}
+                        >
+                          {points}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-5 gap-2">
+                      {[1, 3, 5, 7, 10].map(rounds => (
+                        <button
+                          key={rounds}
+                          onClick={() => setGameSettings(prev => ({ ...prev, winValue: rounds }))}
+                          className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                            gameSettings.winValue === rounds
+                              ? 'bg-gradient-to-br from-purple-500/60 to-pink-500/60 border-2 border-purple-300 text-white shadow-lg shadow-purple-500/50 scale-105'
+                              : 'bg-black/40 border border-purple-700/30 text-purple-400/70 hover:bg-purple-900/40 hover:border-purple-500/50 hover:text-purple-300'
+                          }`}
+                        >
+                          {rounds}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
