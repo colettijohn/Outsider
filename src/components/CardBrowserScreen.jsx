@@ -4,6 +4,7 @@ import Icon from './Icon'
 import AnimatedCosmicBackground from './AnimatedCosmicBackground'
 import TwinkleStar from './TwinkleStar'
 import questionData from '../data/questions.json'
+import { constellationLayouts } from '../data/constellationLayouts'
 
 // Helper function to get icon for each constellation category
 const getCategoryIcon = (categoryName) => {
@@ -41,6 +42,55 @@ const getCategoryDescription = (categoryName) => {
     'Past': 'Reflect on where we came from'
   }
   return descMap[categoryName] || 'A collection of thought-provoking questions'
+}
+
+// Constellation mini component
+const ConstellationMini = ({ categoryName, isSelected }) => {
+  const layout = constellationLayouts[categoryName] || constellationLayouts['Default']
+  
+  return (
+    <svg 
+      viewBox="0 0 100 100" 
+      className="w-full h-full"
+      style={{ filter: isSelected ? 'drop-shadow(0 0 8px rgba(168,85,247,0.8))' : 'none' }}
+    >
+      {/* Connecting lines */}
+      {layout.lines.map((line, idx) => {
+        const start = layout.stars[line[0]]
+        const end = layout.stars[line[1]]
+        return (
+          <line
+            key={idx}
+            x1={start.x}
+            y1={start.y}
+            x2={end.x}
+            y2={end.y}
+            stroke={isSelected ? '#c084fc' : '#7c3aed'}
+            strokeWidth="0.5"
+            className="transition-all duration-300"
+            opacity={isSelected ? 0.9 : 0.5}
+          />
+        )
+      })}
+      
+      {/* Stars */}
+      {layout.stars.map((star, idx) => (
+        <circle
+          key={idx}
+          cx={star.x}
+          cy={star.y}
+          r={idx === 0 ? 2.5 : 1.5}
+          fill={isSelected ? '#e0b3ff' : '#a78bfa'}
+          className="transition-all duration-300"
+          style={{
+            filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'drop-shadow(0 0 2px rgba(167,139,250,0.6))',
+            animation: isSelected ? 'twinkle 2s ease-in-out infinite' : 'none',
+            animationDelay: `${idx * 0.2}s`
+          }}
+        />
+      ))}
+    </svg>
+  )
 }
 
 export default function CardBrowserScreen() {
@@ -249,7 +299,7 @@ export default function CardBrowserScreen() {
                 className={`
                   relative group cursor-pointer
                   rounded-2xl border-2 p-6 transition-all duration-300 transform
-                  backdrop-blur-md
+                  backdrop-blur-md overflow-hidden
                   ${isSelected
                     ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 scale-105 shadow-2xl shadow-purple-500/50 animate-pulse'
                     : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/30'
@@ -257,15 +307,20 @@ export default function CardBrowserScreen() {
                 `}
                 onClick={() => toggleConstellation(constellation.name)}
               >
+                {/* Constellation Background */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none">
+                  <ConstellationMini categoryName={constellation.name} isSelected={isSelected} />
+                </div>
+
                 {/* Selection Indicator */}
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50 animate-bounce">
+                  <div className="absolute top-3 right-3 w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50 animate-bounce z-10">
                     <Icon name="check" size={20} />
                   </div>
                 )}
 
                 {/* Icon */}
-                <div className="flex justify-center mb-4">
+                <div className="flex justify-center mb-4 relative z-10">
                   <div className={`
                     w-20 h-20 rounded-full flex items-center justify-center
                     transition-all duration-300 transform
@@ -279,17 +334,17 @@ export default function CardBrowserScreen() {
                 </div>
 
                 {/* Name */}
-                <h3 className="text-xl sm:text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent">
+                <h3 className="text-xl sm:text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent relative z-10">
                   {constellation.name}
                 </h3>
 
                 {/* Description */}
-                <p className="text-xs sm:text-sm text-purple-300/80 text-center mb-4 min-h-[2.5rem]">
+                <p className="text-xs sm:text-sm text-purple-300/80 text-center mb-4 min-h-[2.5rem] relative z-10">
                   {constellation.description}
                 </p>
 
                 {/* Question Count */}
-                <div className="flex items-center justify-center gap-2 text-purple-400 mb-3">
+                <div className="flex items-center justify-center gap-2 text-purple-400 mb-3 relative z-10">
                   <Icon name="list" size={16} />
                   <span className="font-semibold text-sm">{constellation.count} questions</span>
                 </div>
@@ -300,7 +355,7 @@ export default function CardBrowserScreen() {
                     e.stopPropagation()
                     setPreviewConstellation(constellation)
                   }}
-                  className="w-full py-2 bg-black/30 backdrop-blur-sm border border-purple-600/50 rounded-lg hover:bg-purple-800/50 hover:border-purple-400 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-purple-500/30"
+                  className="w-full py-2 bg-black/30 backdrop-blur-sm border border-purple-600/50 rounded-lg hover:bg-purple-800/50 hover:border-purple-400 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-purple-500/30 relative z-10"
                 >
                   Preview Questions
                 </button>
