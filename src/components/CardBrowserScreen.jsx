@@ -267,14 +267,59 @@ export default function CardBrowserScreen() {
   }
 
   // Quick preset configurations
-  const applyPreset = (presetName) => {
-    const presets = {
-      'quick': ['Desires', 'Relationships', 'Identity'],
-      'deep': ['Fears', 'Regrets', 'Morality'],
-      'party': ['Dreams', 'Memories', 'Future', 'Beliefs'],
-      'balanced': ['Fears', 'Desires', 'Relationships', 'Identity']
+  const presetConfigs = [
+    {
+      name: 'Ice Breaker',
+      emoji: '🧊',
+      categories: ['Daily Routines', 'Food & Drink', 'Wild Cards'],
+      color: 'from-cyan-500/40 to-blue-600/40 border-cyan-400/50 hover:from-cyan-400/50 hover:to-blue-500/50 hover:shadow-cyan-500/50',
+      description: 'Light & fun - perfect for getting to know people',
+      questionCount: 15
+    },
+    {
+      name: 'Deep Dive',
+      emoji: '🌊',
+      categories: ['Deep Thoughts', 'Personality & Psyche', 'History & Mythology'],
+      color: 'from-blue-600/40 to-indigo-700/40 border-blue-400/50 hover:from-blue-500/50 hover:to-indigo-600/50 hover:shadow-blue-500/50',
+      description: 'Philosophical & introspective conversations',
+      questionCount: 15
+    },
+    {
+      name: 'Creative Minds',
+      emoji: '🎨',
+      categories: ['Arts & Literature', 'Hypotheticals', 'Science & Nature'],
+      color: 'from-purple-600/40 to-pink-600/40 border-purple-400/50 hover:from-purple-500/50 hover:to-pink-500/50 hover:shadow-purple-500/50',
+      description: 'Imagination, creativity & what-ifs',
+      questionCount: 15
+    },
+    {
+      name: 'Party Mode',
+      emoji: '🎉',
+      categories: ['Wild Cards', 'Food & Drink', 'Travel & Geography', 'Objects & Places'],
+      color: 'from-yellow-500/40 to-orange-600/40 border-yellow-400/50 hover:from-yellow-400/50 hover:to-orange-500/50 hover:shadow-yellow-500/50',
+      description: 'Energetic & entertaining - great for groups',
+      questionCount: 20
+    },
+    {
+      name: 'Future Forward',
+      emoji: '🚀',
+      categories: ['Technology & Future', 'Science & Nature', 'Hypotheticals'],
+      color: 'from-emerald-500/40 to-teal-600/40 border-emerald-400/50 hover:from-emerald-400/50 hover:to-teal-500/50 hover:shadow-emerald-500/50',
+      description: 'Technology, innovation & the future',
+      questionCount: 15
+    },
+    {
+      name: 'Full Experience',
+      emoji: '⭐',
+      categories: Object.keys(questionData).filter(cat => questionData[cat].length > 0),
+      color: 'from-violet-600/40 to-fuchsia-600/40 border-violet-400/50 hover:from-violet-500/50 hover:to-fuchsia-500/50 hover:shadow-violet-500/50',
+      description: 'Everything - maximum variety',
+      questionCount: 'All'
     }
-    setSelectedConstellations(new Set(presets[presetName] || []))
+  ]
+
+  const applyPreset = (preset) => {
+    setSelectedConstellations(new Set(preset.categories))
   }
 
   // Gather all questions from selected constellations
@@ -353,36 +398,48 @@ export default function CardBrowserScreen() {
         </div>
 
         {/* Quick Presets */}
-        <div className="flex flex-wrap gap-3 mb-6 justify-center">
-          <span className="text-purple-300 font-semibold self-center mr-2">Quick Presets:</span>
-          <button
-            onClick={() => applyPreset('quick')}
-            className="px-4 py-2 bg-gradient-to-br from-green-600/40 to-green-700/40 backdrop-blur-md border border-green-400/50 rounded-lg hover:from-green-500/50 hover:to-green-600/50 hover:border-green-300 transition-all duration-300 shadow-lg hover:shadow-green-500/50 hover:scale-105"
-          >
-            ⚡ Quick
-            <span className="ml-1 text-xs opacity-70">(3 categories)</span>
-          </button>
-          <button
-            onClick={() => applyPreset('deep')}
-            className="px-4 py-2 bg-gradient-to-br from-blue-600/40 to-blue-700/40 backdrop-blur-md border border-blue-400/50 rounded-lg hover:from-blue-500/50 hover:to-blue-600/50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
-          >
-            🌊 Deep
-            <span className="ml-1 text-xs opacity-70">(3 categories)</span>
-          </button>
-          <button
-            onClick={() => applyPreset('party')}
-            className="px-4 py-2 bg-gradient-to-br from-yellow-600/40 to-orange-600/40 backdrop-blur-md border border-yellow-400/50 rounded-lg hover:from-yellow-500/50 hover:to-orange-500/50 hover:border-yellow-300 transition-all duration-300 shadow-lg hover:shadow-yellow-500/50 hover:scale-105"
-          >
-            🎉 Party
-            <span className="ml-1 text-xs opacity-70">(4 categories)</span>
-          </button>
-          <button
-            onClick={() => applyPreset('balanced')}
-            className="px-4 py-2 bg-gradient-to-br from-purple-600/40 to-pink-600/40 backdrop-blur-md border border-purple-400/50 rounded-lg hover:from-purple-500/50 hover:to-pink-500/50 hover:border-purple-300 transition-all duration-300 shadow-lg hover:shadow-purple-500/50 hover:scale-105"
-          >
-            ⚖️ Balanced
-            <span className="ml-1 text-xs opacity-70">(4 categories)</span>
-          </button>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-purple-300 mb-3 flex items-center gap-2">
+            <Icon name="zap" size={20} />
+            Quick Start Presets
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {presetConfigs.map((preset) => (
+              <button
+                key={preset.name}
+                onClick={() => applyPreset(preset)}
+                className={`
+                  relative group p-4 rounded-xl border-2 transition-all duration-300
+                  bg-gradient-to-br backdrop-blur-md
+                  hover:scale-105 shadow-lg
+                  ${preset.color}
+                `}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="text-3xl">{preset.emoji}</div>
+                  <div className="flex-1 text-left">
+                    <div className="font-bold text-white text-lg mb-1">
+                      {preset.name}
+                    </div>
+                    <div className="text-xs text-purple-200/80 mb-2">
+                      {preset.description}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="bg-black/30 px-2 py-1 rounded text-purple-300">
+                        {preset.categories.length} categories
+                      </span>
+                      <span className="bg-black/30 px-2 py-1 rounded text-purple-300">
+                        ~{preset.questionCount} questions
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Hover indicator */}
+                <div className="absolute inset-0 rounded-xl border-2 border-white/0 group-hover:border-white/30 transition-all duration-300 pointer-events-none" />
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Selection Summary */}
