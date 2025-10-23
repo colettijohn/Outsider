@@ -374,6 +374,18 @@ export default function CardBrowserScreen() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showRandomModal, setShowRandomModal] = useState(false)
   const [randomCount, setRandomCount] = useState(5)
+  const [showGameSettings, setShowGameSettings] = useState(false)
+  
+  // Game settings state
+  const [gameSettings, setGameSettings] = useState({
+    winCondition: 'score', // 'score' or 'rounds'
+    winValue: 5, // points to win or number of rounds
+    customTimers: {
+      answer: 60,
+      debate: 60,
+      vote: 45
+    }
+  })
 
   // Track mouse for parallax effect
   const handleMouseMove = (e) => {
@@ -469,9 +481,9 @@ export default function CardBrowserScreen() {
       return
     }
     
-    // Store selected questions in localStorage or context
-    // Then navigate to lobby
+    // Store selected questions and game settings in localStorage
     localStorage.setItem('selectedQuestions', JSON.stringify(questions))
+    localStorage.setItem('gameSettings', JSON.stringify(gameSettings))
     setScreen('lobby')
   }
 
@@ -569,33 +581,54 @@ export default function CardBrowserScreen() {
 
         {/* Selection Summary */}
         <div className="bg-black/40 backdrop-blur-md border border-purple-500/50 rounded-xl p-5 shadow-2xl shadow-purple-500/20">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-center sm:text-left">
-              <div>
-                <span className="text-purple-300/80 text-sm">Selected: </span>
-                <span className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
-                  {selectedConstellations.size}
-                </span>
-                <span className="text-purple-300/80 text-sm ml-1">constellation{selectedConstellations.size !== 1 ? 's' : ''}</span>
+          <div className="flex flex-col gap-4">
+            {/* Stats Row */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-center sm:text-left">
+                <div>
+                  <span className="text-purple-300/80 text-sm">Selected: </span>
+                  <span className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
+                    {selectedConstellations.size}
+                  </span>
+                  <span className="text-purple-300/80 text-sm ml-1">constellation{selectedConstellations.size !== 1 ? 's' : ''}</span>
+                </div>
+                <div className="h-8 w-px bg-purple-500/30 hidden sm:block" />
+                <div>
+                  <span className="text-purple-300/80 text-sm">Questions: </span>
+                  <span className="text-3xl font-bold text-pink-400 drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]">
+                    {getSelectedQuestions().length}
+                  </span>
+                </div>
+                <div className="h-8 w-px bg-purple-500/30 hidden sm:block" />
+                <div>
+                  <span className="text-purple-300/80 text-sm">Win Goal: </span>
+                  <span className="text-2xl font-bold text-cyan-400">
+                    {gameSettings.winCondition === 'score' ? `${gameSettings.winValue} Points` : `${gameSettings.winValue} Rounds`}
+                  </span>
+                </div>
               </div>
-              <div className="h-8 w-px bg-purple-500/30 hidden sm:block" />
-              <div>
-                <span className="text-purple-300/80 text-sm">Questions: </span>
-                <span className="text-3xl font-bold text-pink-400 drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]">
-                  {getSelectedQuestions().length}
-                </span>
-              </div>
+              
+              {/* Game Settings Button */}
+              <button
+                onClick={() => setShowGameSettings(true)}
+                className="px-4 py-2 bg-cyan-600/30 backdrop-blur-sm border border-cyan-400/50 rounded-lg hover:bg-cyan-500/40 hover:border-cyan-300 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
+              >
+                <Icon name="settings" size={20} />
+                <span className="font-semibold">Game Settings</span>
+              </button>
             </div>
+
+            {/* Continue Button Row */}
             <button
               onClick={handleCreateRoom}
               disabled={selectedConstellations.size === 0}
-              className={`px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg ${
+              className={`w-full px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg ${
                 selectedConstellations.size > 0
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 hover:scale-105 shadow-purple-500/50 animate-pulse'
                   : 'bg-gray-800/50 text-gray-500 cursor-not-allowed opacity-50'
               }`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 Continue to Lobby
                 <Icon name="arrow-right" size={20} />
               </span>
@@ -957,6 +990,166 @@ export default function CardBrowserScreen() {
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-pink-500/50 font-bold"
               >
                 🎲 Randomize
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Game Settings Modal */}
+      {showGameSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-purple-900/95 to-black/95 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/30 max-w-2xl w-full p-6 sm:p-8">
+            {/* Header */}
+            <div className="mb-6 text-center">
+              <div className="text-6xl mb-3">⚙️</div>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Game Settings
+              </h2>
+              <p className="text-purple-300/80 text-sm">
+                Customize win conditions and phase timers
+              </p>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-6">
+              {/* Win Condition Section */}
+              <div className="bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-5">
+                <h3 className="text-lg font-bold text-purple-300 mb-4 flex items-center gap-2">
+                  <Icon name="trophy" size={20} />
+                  Victory Condition
+                </h3>
+                
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <button
+                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'score' }))}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      gameSettings.winCondition === 'score'
+                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50'
+                        : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30'
+                    }`}
+                  >
+                    <div className="text-3xl mb-2">🏆</div>
+                    <div className="font-bold text-white">Score Goal</div>
+                    <div className="text-xs text-purple-300/80 mt-1">First to reach points wins</div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setGameSettings(prev => ({ ...prev, winCondition: 'rounds' }))}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                      gameSettings.winCondition === 'rounds'
+                        ? 'bg-gradient-to-br from-purple-600/50 to-pink-600/50 border-purple-400 shadow-lg shadow-purple-500/50'
+                        : 'bg-black/30 border-purple-700/40 hover:border-purple-400 hover:bg-purple-900/30'
+                    }`}
+                  >
+                    <div className="text-3xl mb-2">🔄</div>
+                    <div className="font-bold text-white">Best of Rounds</div>
+                    <div className="text-xs text-purple-300/80 mt-1">Highest score after X rounds</div>
+                  </button>
+                </div>
+
+                {/* Win Value Slider */}
+                <div className="space-y-3">
+                  <label className="block text-sm font-semibold text-purple-300">
+                    {gameSettings.winCondition === 'score' ? 'Points to Win' : 'Number of Rounds'}
+                  </label>
+                  <input
+                    type="range"
+                    min={gameSettings.winCondition === 'score' ? 3 : 1}
+                    max={gameSettings.winCondition === 'score' ? 15 : 10}
+                    value={gameSettings.winValue}
+                    onChange={(e) => setGameSettings(prev => ({ ...prev, winValue: parseInt(e.target.value) }))}
+                    className="w-full h-2 bg-purple-900/50 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                    style={{
+                      background: `linear-gradient(to right, rgb(168 85 247) 0%, rgb(168 85 247) ${((gameSettings.winValue - (gameSettings.winCondition === 'score' ? 3 : 1)) / (gameSettings.winCondition === 'score' ? 12 : 9)) * 100}%, rgb(88 28 135 / 0.5) ${((gameSettings.winValue - (gameSettings.winCondition === 'score' ? 3 : 1)) / (gameSettings.winCondition === 'score' ? 12 : 9)) * 100}%, rgb(88 28 135 / 0.5) 100%)`
+                    }}
+                  />
+                  <div className="flex justify-center">
+                    <div className="bg-purple-500/20 border border-purple-400/50 rounded-lg px-6 py-2">
+                      <span className="text-4xl font-bold text-purple-300">{gameSettings.winValue}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Timers Section */}
+              <div className="bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-5">
+                <h3 className="text-lg font-bold text-purple-300 mb-4 flex items-center gap-2">
+                  <Icon name="clock" size={20} />
+                  Phase Timers
+                </h3>
+                
+                <div className="space-y-4">
+                  {/* Answer Timer */}
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-sm font-semibold text-purple-300">Answer Phase</label>
+                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.answer}s</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="30"
+                      max="180"
+                      step="15"
+                      value={gameSettings.customTimers.answer}
+                      onChange={(e) => setGameSettings(prev => ({
+                        ...prev,
+                        customTimers: { ...prev.customTimers, answer: parseInt(e.target.value) }
+                      }))}
+                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                    />
+                  </div>
+
+                  {/* Debate Timer */}
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-sm font-semibold text-purple-300">Debate Phase</label>
+                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.debate}s</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="30"
+                      max="180"
+                      step="15"
+                      value={gameSettings.customTimers.debate}
+                      onChange={(e) => setGameSettings(prev => ({
+                        ...prev,
+                        customTimers: { ...prev.customTimers, debate: parseInt(e.target.value) }
+                      }))}
+                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                    />
+                  </div>
+
+                  {/* Vote Timer */}
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-sm font-semibold text-purple-300">Voting Phase</label>
+                      <span className="text-cyan-400 font-bold">{gameSettings.customTimers.vote}s</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="20"
+                      max="120"
+                      step="15"
+                      value={gameSettings.customTimers.vote}
+                      onChange={(e) => setGameSettings(prev => ({
+                        ...prev,
+                        customTimers: { ...prev.customTimers, vote: parseInt(e.target.value) }
+                      }))}
+                      className="w-full h-2 bg-cyan-900/50 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowGameSettings(false)}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-pink-500/50 font-bold"
+              >
+                ✓ Save Settings
               </button>
             </div>
           </div>
