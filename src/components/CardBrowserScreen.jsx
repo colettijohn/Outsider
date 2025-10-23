@@ -55,12 +55,81 @@ const ConstellationMini = ({ categoryName, isSelected }) => {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 1; }
         }
+        @keyframes constellation-glow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 4px rgba(168,85,247,0.6));
+          }
+          50% { 
+            filter: drop-shadow(0 0 12px rgba(168,85,247,1)) drop-shadow(0 0 20px rgba(236,72,153,0.8));
+          }
+        }
+        @keyframes line-pulse {
+          0%, 100% { 
+            stroke-width: 0.5;
+            opacity: 0.9;
+          }
+          50% { 
+            stroke-width: 1.2;
+            opacity: 1;
+          }
+        }
+        @keyframes star-burst {
+          0% { 
+            r: 1.5;
+            opacity: 1;
+          }
+          50% { 
+            r: 2.5;
+            opacity: 0.8;
+          }
+          100% { 
+            r: 1.5;
+            opacity: 1;
+          }
+        }
+        @keyframes rotate-constellation {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
       `}</style>
       <svg 
         viewBox="0 0 100 100" 
-        className="w-full h-full"
-        style={{ filter: isSelected ? 'drop-shadow(0 0 8px rgba(168,85,247,0.8))' : 'none' }}
+        className="w-full h-full transition-all duration-500"
+        style={{ 
+          filter: isSelected ? 'drop-shadow(0 0 12px rgba(168,85,247,0.9))' : 'none',
+          animation: isSelected ? 'constellation-glow 3s ease-in-out infinite' : 'none'
+        }}
       >
+        {/* Outer glow ring when selected */}
+        {isSelected && (
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="url(#constellation-gradient)"
+            strokeWidth="0.3"
+            opacity="0.4"
+            style={{
+              animation: 'rotate-constellation 20s linear infinite'
+            }}
+          />
+        )}
+        
+        {/* Gradient definition */}
+        <defs>
+          <linearGradient id="constellation-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="#c084fc" stopOpacity="1" />
+            <stop offset="100%" stopColor="#e879f9" stopOpacity="0.8" />
+          </linearGradient>
+          <radialGradient id="star-gradient">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="50%" stopColor="#e0b3ff" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.7" />
+          </radialGradient>
+        </defs>
+        
         {/* Connecting lines */}
         {layout.lines.map((line, idx) => {
           const start = layout.stars[line[0]]
@@ -72,30 +141,88 @@ const ConstellationMini = ({ categoryName, isSelected }) => {
               y1={start.y}
               x2={end.x}
               y2={end.y}
-              stroke={isSelected ? '#c084fc' : '#7c3aed'}
-              strokeWidth="0.5"
-              className="transition-all duration-300"
+              stroke={isSelected ? 'url(#constellation-gradient)' : '#7c3aed'}
+              strokeWidth={isSelected ? '0.8' : '0.5'}
+              className="transition-all duration-500"
               opacity={isSelected ? 0.9 : 0.5}
+              style={{
+                animation: isSelected ? 'line-pulse 2s ease-in-out infinite' : 'none',
+                animationDelay: `${idx * 0.15}s`
+              }}
             />
           )
         })}
         
         {/* Stars */}
-        {layout.stars.map((star, idx) => (
-          <circle
-            key={idx}
-            cx={star.x}
-            cy={star.y}
-            r={idx === 0 ? 2.5 : 1.5}
-            fill={isSelected ? '#e0b3ff' : '#a78bfa'}
-            className="transition-all duration-300"
-            style={{
-              filter: isSelected ? 'drop-shadow(0 0 4px rgba(224,179,255,0.9))' : 'drop-shadow(0 0 2px rgba(167,139,250,0.6))',
-              animation: isSelected ? 'twinkle 2s ease-in-out infinite' : 'none',
-              animationDelay: `${idx * 0.2}s`
-            }}
-          />
-        ))}
+        {layout.stars.map((star, idx) => {
+          const isMainStar = idx === 0
+          return (
+            <g key={idx}>
+              {/* Outer pulse ring for selected state */}
+              {isSelected && (
+                <circle
+                  cx={star.x}
+                  cy={star.y}
+                  r={isMainStar ? 5 : 3.5}
+                  fill="none"
+                  stroke="#e0b3ff"
+                  strokeWidth="0.3"
+                  opacity="0.3"
+                  style={{
+                    animation: 'star-burst 2s ease-in-out infinite',
+                    animationDelay: `${idx * 0.2}s`
+                  }}
+                />
+              )}
+              {/* Main star */}
+              <circle
+                cx={star.x}
+                cy={star.y}
+                r={isMainStar ? 2.5 : 1.5}
+                fill={isSelected ? 'url(#star-gradient)' : '#a78bfa'}
+                className="transition-all duration-500"
+                style={{
+                  filter: isSelected 
+                    ? 'drop-shadow(0 0 6px rgba(224,179,255,1))' 
+                    : 'drop-shadow(0 0 2px rgba(167,139,250,0.6))',
+                  animation: isSelected ? 'twinkle 2s ease-in-out infinite' : 'none',
+                  animationDelay: `${idx * 0.2}s`
+                }}
+              />
+              {/* Star flare effect when selected */}
+              {isSelected && (
+                <>
+                  <line
+                    x1={star.x}
+                    y1={star.y - (isMainStar ? 4 : 2.5)}
+                    x2={star.x}
+                    y2={star.y + (isMainStar ? 4 : 2.5)}
+                    stroke="#ffffff"
+                    strokeWidth="0.3"
+                    opacity="0.6"
+                    style={{
+                      animation: 'twinkle 2s ease-in-out infinite',
+                      animationDelay: `${idx * 0.2}s`
+                    }}
+                  />
+                  <line
+                    x1={star.x - (isMainStar ? 4 : 2.5)}
+                    y1={star.y}
+                    x2={star.x + (isMainStar ? 4 : 2.5)}
+                    y2={star.y}
+                    stroke="#ffffff"
+                    strokeWidth="0.3"
+                    opacity="0.6"
+                    style={{
+                      animation: 'twinkle 2s ease-in-out infinite',
+                      animationDelay: `${idx * 0.2}s`
+                    }}
+                  />
+                </>
+              )}
+            </g>
+          )
+        })}
       </svg>
     </>
   )
