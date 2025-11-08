@@ -53,8 +53,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-indigo-500/40 hover:via-purple-500/30 hover:to-violet-600/40',
       shadowColor: 'shadow-indigo-500/30 hover:shadow-indigo-400/50',
       selectedGlow: 'shadow-indigo-400/60',
-      hexGradient: ['#4f46e5', '#7c3aed'],
-      accentColor: '#818cf8',
+      hexGradient: ['#818cf8', '#a78bfa'],  // Much brighter: indigo-400 → violet-400
+      accentColor: '#c4b5fd',                // Much brighter: violet-300
       pattern: 'brain-waves',
       animation: 'bounce-subtle'
     },
@@ -64,8 +64,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-yellow-500/40 hover:via-amber-400/30 hover:to-orange-500/40',
       shadowColor: 'shadow-yellow-500/30 hover:shadow-yellow-400/50',
       selectedGlow: 'shadow-yellow-400/60',
-      hexGradient: ['#f59e0b', '#f97316'],
-      accentColor: '#fbbf24',
+      hexGradient: ['#f59e0b', '#f97316'],  // amber-500 → orange-500
+      accentColor: '#fbbf24',                // yellow-400
       pattern: 'question-marks',
       animation: 'bounce-subtle'
     },
@@ -75,8 +75,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-fuchsia-500/40 hover:via-pink-500/30 hover:to-rose-500/40',
       shadowColor: 'shadow-fuchsia-500/30 hover:shadow-fuchsia-400/50',
       selectedGlow: 'shadow-fuchsia-400/60',
-      hexGradient: ['#c026d3', '#e11d48'],
-      accentColor: '#f0abfc',
+      hexGradient: ['#e879f9', '#f9a8d4'],  // Much brighter: fuchsia-400 → pink-300
+      accentColor: '#fae8ff',                // Much brighter: fuchsia-100
       pattern: 'lightning',
       animation: 'bounce-subtle'
     },
@@ -86,8 +86,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-blue-500/40 hover:via-sky-400/30 hover:to-cyan-500/40',
       shadowColor: 'shadow-blue-500/30 hover:shadow-blue-400/50',
       selectedGlow: 'shadow-blue-400/60',
-      hexGradient: ['#2563eb', '#06b6d4'],
-      accentColor: '#60a5fa',
+      hexGradient: ['#60a5fa', '#22d3ee'],  // Much brighter: blue-400 → cyan-400
+      accentColor: '#bae6fd',                // Much brighter: sky-200
       pattern: 'circles',
       animation: 'bounce-subtle'
     },
@@ -97,8 +97,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-slate-500/40 hover:via-gray-400/30 hover:to-zinc-500/40',
       shadowColor: 'shadow-slate-500/30 hover:shadow-slate-400/50',
       selectedGlow: 'shadow-slate-400/60',
-      hexGradient: ['#64748b', '#71717a'],
-      accentColor: '#94a3b8',
+      hexGradient: ['#cbd5e1', '#d4d4d8'],  // Much brighter: slate-300 → zinc-300
+      accentColor: '#f1f5f9',                // Much brighter: slate-100
       pattern: 'grid',
       animation: 'bounce-subtle'
     },
@@ -108,8 +108,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-amber-600/40 hover:via-yellow-600/30 hover:to-orange-700/40',
       shadowColor: 'shadow-amber-600/30 hover:shadow-amber-500/50',
       selectedGlow: 'shadow-amber-500/60',
-      hexGradient: ['#b45309', '#d97706'],
-      accentColor: '#fbbf24',
+      hexGradient: ['#f59e0b', '#f97316'],  // Brighter: amber-500 → orange-500
+      accentColor: '#fcd34d',                // Brighter: amber-300
       pattern: 'scroll',
       animation: 'bounce-subtle'
     },
@@ -119,8 +119,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-emerald-500/40 hover:via-green-500/30 hover:to-teal-600/40',
       shadowColor: 'shadow-emerald-500/30 hover:shadow-emerald-400/50',
       selectedGlow: 'shadow-emerald-400/60',
-      hexGradient: ['#059669', '#0d9488'],
-      accentColor: '#34d399',
+      hexGradient: ['#34d399', '#2dd4bf'],  // Much brighter: emerald-400 → teal-400
+      accentColor: '#a7f3d0',                // Much brighter: emerald-200
       pattern: 'organic',
       animation: 'bounce-subtle'
     },
@@ -130,8 +130,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-purple-500/40 hover:via-fuchsia-400/30 hover:to-pink-500/40',
       shadowColor: 'shadow-purple-500/30 hover:shadow-purple-400/50',
       selectedGlow: 'shadow-purple-400/60',
-      hexGradient: ['#9333ea', '#d946ef'],
-      accentColor: '#c084fc',
+      hexGradient: ['#c084fc', '#e879f9'],  // Much brighter: purple-400 → fuchsia-400
+      accentColor: '#e9d5ff',                // Much brighter: purple-200
       pattern: 'brush-strokes',
       animation: 'bounce-subtle'
     },
@@ -141,8 +141,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-red-500/40 hover:via-rose-400/30 hover:to-pink-500/40',
       shadowColor: 'shadow-red-500/30 hover:shadow-red-400/50',
       selectedGlow: 'shadow-red-400/60',
-      hexGradient: ['#dc2626', '#f43f5e'],
-      accentColor: '#fb7185',
+      hexGradient: ['#f87171', '#fb7185'],  // Much brighter: red-400 → rose-400
+      accentColor: '#fecaca',                // Much brighter: red-200
       pattern: 'food-dots',
       animation: 'bounce-subtle'
     },
@@ -152,8 +152,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-cyan-500/40 hover:via-blue-400/30 hover:to-indigo-500/40',
       shadowColor: 'shadow-cyan-500/30 hover:shadow-cyan-400/50',
       selectedGlow: 'shadow-cyan-400/60',
-      hexGradient: ['#0891b2', '#3b82f6'],
-      accentColor: '#22d3ee',
+      hexGradient: ['#22d3ee', '#60a5fa'],  // Much brighter: cyan-400 → blue-400
+      accentColor: '#a5f3fc',                // Much brighter: cyan-200
       pattern: 'waves',
       animation: 'bounce-subtle'
     },
@@ -163,8 +163,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-violet-500/40 hover:via-purple-400/30 hover:to-fuchsia-500/40',
       shadowColor: 'shadow-violet-500/30 hover:shadow-violet-400/50',
       selectedGlow: 'shadow-violet-400/60',
-      hexGradient: ['#7c3aed', '#c026d3'],
-      accentColor: '#a78bfa',
+      hexGradient: ['#a78bfa', '#e879f9'],  // Much brighter: violet-400 → fuchsia-400
+      accentColor: '#ddd6fe',                // Much brighter: violet-200
       pattern: 'circuit',
       animation: 'bounce-subtle'
     },
@@ -174,8 +174,8 @@ const getCategoryTheme = (categoryName) => {
       hoverGradients: 'hover:from-rose-500/40 hover:via-pink-400/30 hover:to-fuchsia-500/40',
       shadowColor: 'shadow-rose-500/30 hover:shadow-rose-400/50',
       selectedGlow: 'shadow-rose-400/60',
-      hexGradient: ['#e11d48', '#ec4899'],
-      accentColor: '#fb7185',
+      hexGradient: ['#fb7185', '#f472b6'],  // Much brighter: rose-400 → pink-400
+      accentColor: '#fecdd3',                // Much brighter: rose-200
       pattern: 'hearts',
       animation: 'bounce-subtle'
     }
@@ -718,13 +718,12 @@ export default function CardBrowserScreen() {
                       {/* Inner hexagon */}
                       <polygon
                         points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5"
-                        fill={isSelected 
-                          ? 'url(#hex-gradient-' + constellation.name + ')' 
-                          : `${theme.hexGradient[0]}33`}
+                        fill={`url(#hex-gradient-${constellation.name})`}
                         stroke={isSelected ? theme.accentColor : theme.hexGradient[0]}
                         strokeWidth="1"
                         className="transition-all duration-500"
                         style={{
+                          opacity: isSelected ? 1 : 0.15,
                           filter: isSelected ? `drop-shadow(0 0 10px ${theme.accentColor})` : 'none'
                         }}
                       />

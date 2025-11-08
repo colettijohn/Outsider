@@ -162,31 +162,64 @@ npm install
 
 ## 🚢 Deployment
 
-Works with: Netlify, Vercel, GitHub Pages, or any static host
+### Quick Deploy (Recommended)
+
+**Frontend (Netlify)** + **Backend (Render)**
+
+1. **Deploy Server to Render**
+   - Root directory: `server`
+   - Build: `npm install`
+   - Start: `npm start`
+   - Add env var: `NODE_ENV=production`
+
+2. **Deploy Frontend to Netlify**
+   - Build: `npm run build`
+   - Publish: `dist`
+   - Add env var: `VITE_SERVER_URL=https://your-render-url.onrender.com`
+
+3. **Update CORS**
+   - In Render, add env var: `CLIENT_URL=https://your-netlify-url.netlify.app`
+
+📖 **Detailed Guide**: See [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)  
+✅ **Quick Checklist**: See [`DEPLOYMENT_CHECKLIST.md`](./DEPLOYMENT_CHECKLIST.md)
+
+### Alternative Deployment Options
+
+- **Frontend**: Vercel, GitHub Pages, Cloudflare Pages
+- **Backend**: Railway, Fly.io, AWS, Heroku
+
+### Local Multiplayer Setup
 
 ```bash
-npm run build  # Creates dist/ folder
+# Terminal 1: Start server
+cd server
+npm install
+npm start
+
+# Terminal 2: Start client
+npm run dev
 ```
+
+Create `.env` file:
+```bash
+VITE_SERVER_URL=http://localhost:8080
+```
+
+### Single Player (Offline Mode)
+
+No setup needed! The app automatically uses MockSocket for local simulation when `VITE_SERVER_URL` is not set.
 
 ---
 
-## 🌐 Multiplayer (Online)
+## 🌐 Environment Variables
 
-This app ships with a local simulator (MockSocket). To play across the internet, run the real-time server.
+### Client (Frontend)
+- `VITE_SERVER_URL` - Socket.IO server URL (optional, uses MockSocket if not set)
 
-1) Start the server locally (or deploy):
-  - See `server/README.md` for instructions.
-
-2) Configure the frontend:
-  - Create a `.env` in the project root with:
-    - `VITE_SERVER_URL=https://your-server.example.com`
-  - Rebuild and redeploy the frontend.
-
-3) Netlify setup:
-  - In Site settings → Build & deploy → Environment → add `VITE_SERVER_URL`.
-  - Trigger a new deploy.
-
-With `VITE_SERVER_URL` set, the app automatically uses the live Socket.IO server instead of MockSocket.
+### Server (Backend)
+- `NODE_ENV` - Set to `production` in deployment
+- `CLIENT_URL` - Your frontend URL for CORS (e.g., `https://your-app.netlify.app`)
+- `PORT` - Server port (default: 8080, auto-set by Render)
 
 ---
 

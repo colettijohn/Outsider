@@ -1,0 +1,21 @@
+# Render Blueprint for Outsider: Cosmic Council Server
+# This file enables one-click deployment to Render
+
+services:
+  - type: web
+    name: outsider-server
+    runtime: node
+    region: oregon # Change to your preferred region
+    plan: free # Change to 'starter' or higher for production
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: CLIENT_URL
+        sync: false # Set manually in Render dashboard after Netlify deployment
+    healthCheckPath: /
+    autoDeploy: true
